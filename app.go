@@ -1,8 +1,8 @@
 package main
 
 import (
+	"The_Book/internal/appr"
 	"context"
-	"fmt"
 )
 
 // App struct
@@ -19,9 +19,7 @@ func NewApp() *App {
 // so we can call the runtime methods
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
+	// Create appr if not exist
+	appr.CreateApprDir()
 }
 
-// Greet returns a greeting for the given name
-func (a *App) Greet(name string) string {
-	return fmt.Sprintf("Hello %s, It's show time!", name)
-}

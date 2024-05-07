@@ -4,5 +4,17 @@
 }
 
 * {
-  font-family: Inter sans sans-serif;
+  font-family: "Inter" sans sans-serif;
+}
+
+.input {
+  @apply border-4 border-black rounded-md p-3 placeholder:text-2xl placeholder:font-semibold;
+}
+
+.file-input {
+  @apply border-4 border-black rounded-md pt-3 pb-3 bg-gray cursor-pointer hover:bg-white duration-100;
+}
+
+.btn {
+  @apply bg-black pl-10 pr-10 pt-2 pb-2 rounded-xl font-semibold text-white;
 }

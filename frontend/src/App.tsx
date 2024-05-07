@@ -1,10 +1,27 @@
 import "./App.css";
 
+import { GetBooksCount } from "../wailsjs/go/appr/AppResources";
+import { useEffect, useState } from "react";
+import { redirect } from "react-router-dom";
+
 function App() {
+  const [err, setErr] = useState("");
+  useEffect(() => {
+    GetBooksCount()
+      .then((d) => {
+        if (!d) {
+          location.href = "/first_book";
+        }
+      })
+      .catch((err) => {
+        setErr(err.message);
+      });
+  });
+
   return (
-    <h1 className="text-[64px] text-center text-red-500 font-black">
-      The Project Is In Development
-    </h1>
+    <>
+      <h1>{err}</h1>
+    </>
   );
 }
 
