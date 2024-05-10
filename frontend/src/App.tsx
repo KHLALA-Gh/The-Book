@@ -10,7 +10,7 @@ function App() {
     GetBooksCount()
       .then((d) => {
         if (!d) {
-          location.href = "/first_book";
+          location.href = "/#/first_book";
         }
       })
       .catch((err) => {
@@ -20,7 +20,7 @@ function App() {
 
   return (
     <>
-      <h1>{err}</h1>
+      <h1>{err} wa</h1>
     </>
   );
 }
