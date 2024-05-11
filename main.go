@@ -2,6 +2,7 @@ package main
 
 import (
 	"The_Book/internal/appr"
+	"The_Book/internal/database"
 	"The_Book/internal/env"
 	"embed"
 	"log"
@@ -33,6 +34,7 @@ func main() {
 		log.Fatal(err)
 	}
 	db,err := gorm.Open(sqlite.Open(path.Join(apprDir,"./database/data.db")))
+	database.MigrateTables(db)
 	if err !=nil {
 		log.Fatal(err)
 	}

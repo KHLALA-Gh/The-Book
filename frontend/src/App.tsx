@@ -1,26 +1,33 @@
 import "./App.css";
-
-import { GetBooksCount } from "../wailsjs/go/appr/AppResources";
+import Logo from "./assets/images/logo.png";
+import { GetBooksCount } from "../wailsjs/go/main/App";
 import { useEffect, useState } from "react";
-import { redirect } from "react-router-dom";
 
 function App() {
   const [err, setErr] = useState("");
   useEffect(() => {
     GetBooksCount()
-      .then((d) => {
-        if (!d) {
+      .then((count) => {
+        if (!count) {
           location.href = "/#/first_book";
+          return;
         }
+        location.href = "/#/home";
       })
       .catch((err) => {
-        setErr(err.message);
+        location.href = "/#/home";
       });
-  });
+  }, []);
 
   return (
     <>
-      <h1>{err} wa</h1>
+      <div className="flex w-full h-screen justify-center items-center">
+        <div className="flex gap-7 items-center">
+          <div>
+            <img src={Logo} alt="" />
+          </div>
+        </div>
+      </div>
     </>
   );
 }

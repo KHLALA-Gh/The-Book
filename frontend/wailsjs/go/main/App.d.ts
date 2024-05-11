@@ -5,4 +5,8 @@ export function AskForBookImage():Promise<string>;
 
 export function AskForBookPDF():Promise<string>;
 
-export function CreateBook(arg1:string,arg2:string,arg3:string):Promise<string>;
+export function CheckBookExist(arg1:string):Promise<boolean>;
+
+export function CreateBook(arg1:string,arg2:string,arg3:string):Promise<number>;
+
+export function GetBooksCount():Promise<number>;

@@ -1,5 +1,7 @@
 package database
 
+import "time"
+
 
 
 type Book struct {
@@ -9,4 +11,7 @@ type Book struct {
 	Progress int 
 	PDFileName string
 	ImgExt string
+	Favorite bool
+	CreatedAt    time.Time
+  	UpdatedAt    time.Time
 }

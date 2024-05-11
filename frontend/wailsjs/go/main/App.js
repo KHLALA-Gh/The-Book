@@ -10,6 +10,14 @@ export function AskForBookPDF() {
   return window['go']['main']['App']['AskForBookPDF']();
 }
 
+export function CheckBookExist(arg1) {
+  return window['go']['main']['App']['CheckBookExist'](arg1);
+}
+
 export function CreateBook(arg1, arg2, arg3) {
   return window['go']['main']['App']['CreateBook'](arg1, arg2, arg3);
+}
+
+export function GetBooksCount() {
+  return window['go']['main']['App']['GetBooksCount']();
 }

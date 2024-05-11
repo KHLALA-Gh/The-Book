@@ -4,6 +4,7 @@ import { faFile, faImage } from "@fortawesome/free-solid-svg-icons";
 import {
   AskForBookImage,
   AskForBookPDF,
+  CheckBookExist,
   CreateBook,
 } from "../../wailsjs/go/main/App";
 import { useState } from "react";
@@ -12,6 +13,7 @@ export default function FirstBook() {
   const [bookPDF, setBookPDF] = useState("");
   const [image, setImg] = useState("");
   const [err, setErr] = useState("");
+  const [nameExist, setNameExist] = useState(false);
   const nameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
   };
@@ -53,6 +55,9 @@ export default function FirstBook() {
               className="input w-[400px]"
               placeholder="Name"
             />
+            {nameExist && (
+              <p className="text-red-600 font-bold">This name already exist</p>
+            )}
             {!image && (
               <div
                 className="file-input w-[400px] flex justify-center flex-col items-center gap-3"
@@ -60,7 +65,7 @@ export default function FirstBook() {
               >
                 <p className="text-light">Book picture</p>
                 <div className="w-[109px] h-[109px] border-2 border-light"></div>
-                <p className="text-light">72x72</p>
+                <p className="text-light">667x1000</p>
               </div>
             )}
             {image && (
@@ -112,7 +117,17 @@ export default function FirstBook() {
                 return;
               }
               setErr("");
-              let a = await CreateBook(name, image, bookPDF);
+
+              try {
+                let exist = await CheckBookExist(name);
+                setNameExist(exist);
+                if (exist) {
+                  return;
+                }
+                await CreateBook(name, image, bookPDF);
+              } catch (err: any) {
+                setErr(err);
+              }
             }}
           >
             Create

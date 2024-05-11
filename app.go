@@ -59,7 +59,7 @@ func (a *App) AskForBookImage() (string,error) {
 	return imgPath,nil
 }
 
-func (a *App) CreateBook(name,img,bookFile string) (string,error) {
+func (a *App) CreateBook(name,img,bookFile string) (uint,error) {
 	book := database.Book{
 		Name: name,
 		Path: "library/"+name,
@@ -68,8 +68,33 @@ func (a *App) CreateBook(name,img,bookFile string) (string,error) {
 	}
 	err := book.CreateBookDir(bookFile,img)
 	if err != nil {
-		return "",err
+		return 0,err
 	}
-	// TODO : Insert the book in the database
-	return "",err
-} 
+	err = book.Add(a.db)
+	if err !=nil {
+
+		return 0,err
+	}
+	return book.ID,err
+}
+
+func (a *App) GetBooksCount() (int64,error) {
+	var count int64
+	err := a.db.Model(&database.Book{}).Count(&count).Error
+	if err != nil {
+		return 0,err
+	}
+	return count,nil
+}
+
+func (a *App) CheckBookExist(name string) (bool,error) {
+	var count int64
+	err := a.db.Model(&database.Book{}).Where("name = ?",name).Count(&count).Error
+	if err != nil {
+		return false,err
+	}
+	if count == 0 {
+		return false , nil
+	}
+	return true,nil
+}

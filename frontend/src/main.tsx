@@ -10,6 +10,7 @@ import {
   createBrowserRouter,
 } from "react-router-dom";
 import FirstBook from "./first_book";
+import Home from "./home";
 
 const container = document.getElementById("root");
 
@@ -33,6 +34,7 @@ root.render(
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/first_book" element={<FirstBook />} />
+        <Route path="/home" element={<Home />} />
         {/* more... */}
       </Routes>
     </HashRouter>
