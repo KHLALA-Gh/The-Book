@@ -11,6 +11,7 @@ import {
 } from "react-router-dom";
 import FirstBook from "./first_book";
 import Home from "./home";
+import NotFound from "./notfound";
 
 const container = document.getElementById("root");
 
@@ -35,6 +36,7 @@ root.render(
         <Route path="/" element={<App />} />
         <Route path="/first_book" element={<FirstBook />} />
         <Route path="/home" element={<Home />} />
+        <Route path="*" element={<NotFound />} />
         {/* more... */}
       </Routes>
     </HashRouter>

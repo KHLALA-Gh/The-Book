@@ -11,6 +11,7 @@ type Button = {
   name: string;
   pathName: string;
   icon: IconDefinition;
+  redirectTo: string;
 };
 
 const btns: Button[] = [
@@ -18,16 +19,19 @@ const btns: Button[] = [
     name: "Store",
     pathName: "store",
     icon: faStore,
+    redirectTo: "/#/store",
   },
   {
     name: "Home",
     pathName: "home",
     icon: faHouse,
+    redirectTo: "/#/home",
   },
   {
     name: "Library",
     pathName: "lib",
     icon: faBook,
+    redirectTo: "/#/library",
   },
 ];
 
@@ -38,12 +42,15 @@ export default function Bar() {
   }, []);
   return (
     <>
-      <div className="w-[120px] rounded-l-md shadow-2xl h-screen">
+      <div className="w-[120px] rounded-l-md shadow-2xl h-screen fixed z-10">
         <div className="mt-20 flex flex-col gap-16">
           {btns.map((btn, i) => {
             return (
               <>
                 <div
+                  onClick={() => {
+                    location.href = btn.redirectTo;
+                  }}
                   key={i}
                   className="flex flex-col items-center relative cursor-pointer"
                 >

@@ -4,7 +4,9 @@ import (
 	"The_Book/internal/appr"
 	"The_Book/internal/database"
 	"context"
+	"os"
 	"path"
+	"time"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 	"gorm.io/gorm"
@@ -97,4 +99,60 @@ func (a *App) CheckBookExist(name string) (bool,error) {
 		return false , nil
 	}
 	return true,nil
+}
+
+
+type HomeBooksData struct{
+	RecentlyAdded []database.Book `json:"recentlyAdded"`
+	LastReaded []database.Book		`json:"lastReaded"`
+}
+// Get the books data for the home page
+func (a *App) GetHomeBooks() (HomeBooksData,error) {
+	now := time.Now()
+	finishDate := now.AddDate(0,0,-15)
+	recentlyAdded := []database.Book{}
+	err := a.db.Model(&database.Book{}).Where("created_at > ?",finishDate).Find(&recentlyAdded).Error
+	if err !=nil {
+		return HomeBooksData{},err
+	}
+	apprPath,err := appr.GetAppResourcesDir()
+	if err !=nil {
+		return HomeBooksData{},err
+	}
+	for i,book := range recentlyAdded {
+		recentlyAdded[i].Img = path.Join(apprPath,book.Path,"img"+book.ImgExt)
+	}
+	lastReaded := []database.Book{}
+	err = a.db.Model(&database.Book{}).Where("last_readed > ?",finishDate).Find(&lastReaded).Error
+	if err != nil {
+		return HomeBooksData{},err
+	}
+	return HomeBooksData{
+		RecentlyAdded: recentlyAdded,
+		LastReaded: lastReaded,
+	},nil
+}
+
+func (a *App) OpenImage(filename string) ([]byte, error) {
+    // Read image file
+    file, err := os.Open(filename)
+    if err != nil {
+        return nil, err
+    }
+    defer file.Close()
+
+    // Get file info to determine the file size
+    fileInfo, err := file.Stat()
+    if err != nil {
+        return nil, err
+    }
+    fileSize := fileInfo.Size()
+
+    // Read the file contents into a byte slice
+    data := make([]byte, fileSize)
+    _, err = file.Read(data)
+    if err != nil {
+        return nil, err
+    }
+    return data, nil
 }

@@ -21,3 +21,11 @@ export function CreateBook(arg1, arg2, arg3) {
 export function GetBooksCount() {
   return window['go']['main']['App']['GetBooksCount']();
 }
+
+export function GetHomeBooks() {
+  return window['go']['main']['App']['GetHomeBooks']();
+}
+
+export function OpenImage(arg1) {
+  return window['go']['main']['App']['OpenImage'](arg1);
+}
