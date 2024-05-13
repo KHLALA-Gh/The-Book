@@ -39,6 +39,7 @@ func main() {
 		log.Fatal(err)
 	}
 	app.db = db
+	app.apprPath = apprDir
 	err = wails.Run(&options.App{
 		Title:  "The_Book",
 		Width:  1024,

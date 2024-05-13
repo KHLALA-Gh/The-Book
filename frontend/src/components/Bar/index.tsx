@@ -2,6 +2,7 @@ import {
   IconDefinition,
   faBook,
   faHouse,
+  faPlus,
   faStore,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -29,9 +30,15 @@ const btns: Button[] = [
   },
   {
     name: "Library",
-    pathName: "lib",
+    pathName: "library",
     icon: faBook,
     redirectTo: "/#/library",
+  },
+  {
+    name: "New",
+    pathName: "new_book",
+    icon: faPlus,
+    redirectTo: "/#/new_book",
   },
 ];
 

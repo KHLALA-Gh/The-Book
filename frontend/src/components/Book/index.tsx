@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { OpenImage } from "../../../wailsjs/go/main/App";
 import DefaultImg from "../../assets/images/dfbook.png";
+import useImg from "../../hooks/useImage";
 
 type BookAttr = {
   id: number;
@@ -10,18 +11,15 @@ type BookAttr = {
 };
 
 export default function Book({ id, name, img, progress }: BookAttr) {
-  const [imgData, setImgData] = useState<string>("");
-  const [imgExt, _] = useState<string>(
-    img.split("/").at(-1)?.split(".").at(-1) as string
-  );
-  useEffect(() => {
-    OpenImage(img).then((imgBytes) => {
-      setImgData(`data:image/${imgExt};base64,${imgBytes}`);
-    });
-  });
+  const { imgData } = useImg(img);
   return (
     <>
-      <div className="bg-gray w-fit pb-7 cursor-pointer">
+      <div
+        className="bg-gray w-fit pb-7 cursor-pointer"
+        onClick={() => {
+          location.href = `/#/book/${id}`;
+        }}
+      >
         <img src={imgData.length ? imgData : DefaultImg} alt="" width={226} />
         <div className="mt-3">
           <h1 className="text-center text-[24px] font-bold">{name}</h1>

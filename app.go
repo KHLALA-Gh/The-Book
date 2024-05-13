@@ -16,6 +16,7 @@ import (
 type App struct {
 	ctx context.Context
 	db *gorm.DB
+	apprPath string
 }
 
 // NewApp creates a new App application struct
@@ -131,6 +132,19 @@ func (a *App) GetHomeBooks() (HomeBooksData,error) {
 		RecentlyAdded: recentlyAdded,
 		LastReaded: lastReaded,
 	},nil
+}
+// Get the book data, usually used for the frontend
+func (a *App) GetBook(id uint) (database.Book,error) {
+	book := database.Book{
+		ID: id,
+	}
+	err := book.Get(a.db)
+	if err !=nil {
+		return database.Book{},nil
+	}
+
+	book.Img = path.Join(a.apprPath,book.Path,"img"+book.ImgExt)
+	return book,nil
 }
 
 func (a *App) OpenImage(filename string) ([]byte, error) {

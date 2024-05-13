@@ -40,55 +40,6 @@ export default function Home() {
                   progress={book.progress}
                   img={book.img}
                 />
-                <Book
-                  key={i}
-                  name={book.name}
-                  id={book.id}
-                  progress={book.progress}
-                  img={book.img}
-                />
-                <Book
-                  key={i}
-                  name={book.name}
-                  id={book.id}
-                  progress={book.progress}
-                  img={book.img}
-                />
-                <Book
-                  key={i}
-                  name={book.name}
-                  id={book.id}
-                  progress={book.progress}
-                  img={book.img}
-                />
-                <Book
-                  key={i}
-                  name={book.name}
-                  id={book.id}
-                  progress={book.progress}
-                  img={book.img}
-                />
-                <Book
-                  key={i}
-                  name={book.name}
-                  id={book.id}
-                  progress={book.progress}
-                  img={book.img}
-                />
-                <Book
-                  key={i}
-                  name={book.name}
-                  id={book.id}
-                  progress={book.progress}
-                  img={book.img}
-                />
-                <Book
-                  key={i}
-                  name={book.name}
-                  id={book.id}
-                  progress={book.progress}
-                  img={book.img}
-                />
               </>
             );
           })}
