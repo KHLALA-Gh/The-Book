@@ -44,7 +44,7 @@ export default function Read() {
       )}
       {!err && (
         <>
-          <PDFViewer file={pdfBase64} pageNumber={page} id={`${id}`} />
+          <PDFViewer file={pdfBase64} pageNumber={page} />
         </>
       )}
     </>
