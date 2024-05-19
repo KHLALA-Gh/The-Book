@@ -4,6 +4,7 @@ import (
 	"The_Book/internal/appr"
 	"The_Book/internal/database"
 	"context"
+	"fmt"
 	"os"
 	"path"
 	"time"
@@ -169,4 +170,22 @@ func (a *App) OpenImage(filename string) ([]byte, error) {
         return nil, err
     }
     return data, nil
+}
+
+
+func (a *App) GetBookPDFData(id uint) (string,error) {
+	fmt.Println("###########################")
+
+	book := database.Book {
+		ID: id,
+	}
+	err := book.Get(a.db)
+	if err != nil {
+		return "",err
+	}
+	pdfBase64,err := appr.GetBookPDFBase64(path.Join(book.Path,book.PDFileName))
+	if err != nil {
+		return "",err
+	}
+	return pdfBase64,nil
 }

@@ -63,7 +63,14 @@ export default function Book() {
               <h1 className="text-[24px]">
                 Progress : <span className="font-bold">{book?.progress}</span>%
               </h1>
-              <button className="btn text-[22px] mt-4">Read</button>
+              <button
+                className="btn text-[22px] mt-4"
+                onClick={() => {
+                  location.href = `/#/book/${id}/read`;
+                }}
+              >
+                Read
+              </button>
             </div>
           </div>
         )}

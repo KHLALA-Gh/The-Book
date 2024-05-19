@@ -13,6 +13,8 @@ export function CreateBook(arg1:string,arg2:string,arg3:string):Promise<number>;
 
 export function GetBook(arg1:number):Promise<database.Book>;
 
+export function GetBookPDFData(arg1:number):Promise<string>;
+
 export function GetBooksCount():Promise<number>;
 
 export function GetHomeBooks():Promise<main.HomeBooksData>;

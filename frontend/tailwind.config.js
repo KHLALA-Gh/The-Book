@@ -5,7 +5,8 @@ export default {
     extend: {
       colors: {
         light: "rgba(0, 0, 0, 0.5)",
-        gray: "rgba(0, 0, 0, 0.08)",
+        gray: "#ebebeb",
+        hover: "#00000029",
       },
     },
   },

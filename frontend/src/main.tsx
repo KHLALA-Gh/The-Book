@@ -13,6 +13,14 @@ import FirstBook from "./first_book";
 import Home from "./home";
 import NotFound from "./notfound";
 import Book from "./book";
+import Read from "./book/read";
+
+import { pdfjs } from "react-pdf";
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  "assets/pdfjs-dist/build/pdf.worker.js",
+  import.meta.url
+).toString();
 
 const container = document.getElementById("root");
 
@@ -38,6 +46,7 @@ root.render(
         <Route path="/first_book" element={<FirstBook />} />
         <Route path="/home" element={<Home />} />
         <Route path="/book/:id" element={<Book />} />
+        <Route path="/book/:id/read" element={<Read />} />
         <Route path="*" element={<NotFound />} />
         {/* more... */}
       </Routes>

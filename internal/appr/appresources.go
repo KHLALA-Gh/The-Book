@@ -1,6 +1,7 @@
 package appr
 
 import (
+	"encoding/base64"
 	"fmt"
 	"os"
 	"os/user"
@@ -102,4 +103,21 @@ func (appr *AppResources) GetBooksCount() (int,error) {
 		}
 	}
 	return booksCount,nil
+}
+
+// Get the book pdf file encoded in base64.
+// note : path is the relative path for the book directory in the app resources dir.
+// for example : path = library/{book name}/file.pdf
+func GetBookPDFBase64(bookPath string) (string,error) {
+	apprDir,err := GetAppResourcesDir()
+	if err != nil {
+		return "" , err
+	}
+	filePath := path.Join(apprDir,bookPath)
+	data,err := os.ReadFile(filePath)
+	if err != nil {
+		return "",err
+	}
+	pdfBase64 := base64.StdEncoding.EncodeToString(data)
+	return pdfBase64,nil
 }
