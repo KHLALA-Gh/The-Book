@@ -15,9 +15,9 @@ type PDFOutline = {
 type BookMetaData = {
   Author: string;
   CreationDate: string;
-  Publisher: string;
+  Creator: string;
   Title: string;
-  Language: string;
+  PageCount: number;
 };
 
 type TopBarData = {

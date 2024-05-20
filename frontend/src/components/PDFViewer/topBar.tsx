@@ -103,8 +103,8 @@ export default function TopBar({
                   <div className="absolute bg-gray w-[500px] rounded-md flex gap-3 flex-col p-2 translate-y-[10px]">
                     <h1>Title : {metadata.Title}</h1>
                     <h1>Author : {metadata.Author}</h1>
-                    <h1>Publisher : {metadata.Publisher}</h1>
-                    <h1>Language : {metadata.Language}</h1>
+                    <h1>Creator : {metadata.Creator}</h1>
+                    <h1>Pages : {metadata.PageCount}</h1>
                     <h1>
                       Creation Date :{" "}
                       {new Date(metadata.CreationDate).toLocaleDateString()}

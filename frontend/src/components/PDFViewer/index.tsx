@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { RefProxy } from "pdfjs-dist/types/src/display/api";
 import TopBar from "./topBar";
+import usePDFMetadata from "../../hooks/usePDFMetadata";
 
 const EditablePdfViewer: React.FC<EditablePdfViewerProps> = ({
   file,
@@ -18,7 +19,9 @@ const EditablePdfViewer: React.FC<EditablePdfViewerProps> = ({
   const [pdfBlobUrl, setBlobUrl] = useState("");
   const [pdfOutline, setPdfOutline] = useState<PDFOutline[]>();
   const pagesRef = useRef<HTMLDivElement[]>([]);
-  const [metadata, setMetadata] = useState<BookMetaData>();
+  const { metadata } = usePDFMetadata(file);
+
+  //const [metadata, setMetadata] = useState<BookMetaData>();
   async function onDocumentLoadSuccess(doc: DocumentCallback) {
     let outline = await doc.getOutline();
     setPdfOutline(() => {
@@ -30,8 +33,8 @@ const EditablePdfViewer: React.FC<EditablePdfViewerProps> = ({
       });
       return pdfOutline;
     });
-    let metadata = (await doc.getMetadata()).metadata;
-    setMetadata(() => {
+    //let metadata = (await doc.getMetadata()).metadata;
+    /*setMetadata(() => {
       return {
         Author: metadata.get("calibre:author_sort"),
         CreationDate: metadata.get("dc:date"),
@@ -39,7 +42,7 @@ const EditablePdfViewer: React.FC<EditablePdfViewerProps> = ({
         Publisher: metadata.get("dc:publisher"),
         Title: metadata.get("dc:title"),
       };
-    });
+    });*/
     setNumPages(doc.numPages);
   }
   const base64toBlob = (base64: string) => {

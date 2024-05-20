@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { GetBook } from "../../wailsjs/go/main/App";
+import { GetBook, GetBookPDFData } from "../../wailsjs/go/main/App";
 import { database } from "../../wailsjs/go/models";
 import useImg from "../hooks/useImage";
 import DefaultTemplate from "../components/Templates/Default";
@@ -10,11 +10,14 @@ import {
   faPencil,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
+import usePDFMetadata from "../hooks/usePDFMetadata";
 
 export default function Book() {
   const { id } = useParams();
   const [book, setBook] = useState<database.Book>();
   const [op, setOp] = useState<boolean>();
+  const [pdfBase64, setPDFbase64] = useState<string>("");
+  const { metadata, isError, isLoading } = usePDFMetadata(pdfBase64);
   const { imgData } = useImg(book?.img || "");
   const [err, setErr] = useState<string>("");
   useEffect(() => {
@@ -26,6 +29,15 @@ export default function Book() {
       setBook(book);
     });
   }, []);
+  useEffect(() => {
+    if (Number.isInteger(id)) {
+      setErr("Not A Valid ID " + id);
+      return;
+    }
+    GetBookPDFData(+(id as string)).then((data) => {
+      setPDFbase64(data);
+    });
+  }, []);
   return (
     <>
       <DefaultTemplate>
@@ -35,44 +47,83 @@ export default function Book() {
           </div>
         )}
         {!err && (
-          <div className="flex gap-20">
-            <div>
-              <img src={imgData} alt="wawa" width={226} />
-            </div>
-            <div>
-              <h1 className="text-[32px] font-bold relative">
-                {book?.name}{" "}
-                <FontAwesomeIcon
+          <>
+            <div className="flex gap-20">
+              <div>
+                <img src={imgData} alt="wawa" width={226} />
+              </div>
+              <div>
+                <h1 className="text-[32px] font-bold relative">
+                  {book?.name}{" "}
+                  <FontAwesomeIcon
+                    onClick={() => {
+                      setOp(!op);
+                    }}
+                    className="ml-2 cursor-pointer"
+                    icon={faEllipsisVertical}
+                  />
+                  {op && (
+                    <div className="rounded-md border-2 border-black text-[20px] absolute bottom-0 right-0 translate-y-[100%] translate-x-[100%] bg-white flex-col">
+                      <div className="pt-1 pb-1 pr-5 pl-5 bg-red-600 text-white cursor-pointer">
+                        <FontAwesomeIcon icon={faTrash} className="mr-2" />{" "}
+                        delete
+                      </div>
+                      <div className="border-t-2 border-black pt-1 pb-1 pr-5 pl-5 cursor-pointer">
+                        <FontAwesomeIcon icon={faPencil} className="mr-2" />{" "}
+                        Edit
+                      </div>
+                    </div>
+                  )}
+                </h1>
+                <h1 className="text-[24px]">
+                  Progress : <span className="font-bold">{book?.progress}</span>
+                  %
+                </h1>
+                <button
+                  className="btn text-[22px] mt-4"
                   onClick={() => {
-                    setOp(!op);
+                    location.href = `/#/book/${id}/read`;
                   }}
-                  className="ml-2 cursor-pointer"
-                  icon={faEllipsisVertical}
-                />
-                {op && (
-                  <div className="rounded-md border-2 border-black text-[20px] absolute bottom-0 right-0 translate-y-[100%] translate-x-[100%] bg-white flex-col">
-                    <div className="pt-1 pb-1 pr-5 pl-5 bg-red-600 text-white cursor-pointer">
-                      <FontAwesomeIcon icon={faTrash} className="mr-2" /> delete
-                    </div>
-                    <div className="border-t-2 border-black pt-1 pb-1 pr-5 pl-5 cursor-pointer">
-                      <FontAwesomeIcon icon={faPencil} className="mr-2" /> Edit
-                    </div>
-                  </div>
-                )}
-              </h1>
-              <h1 className="text-[24px]">
-                Progress : <span className="font-bold">{book?.progress}</span>%
-              </h1>
-              <button
-                className="btn text-[22px] mt-4"
-                onClick={() => {
-                  location.href = `/#/book/${id}/read`;
-                }}
-              >
-                Read
-              </button>
+                >
+                  Read
+                </button>
+              </div>
             </div>
-          </div>
+            {metadata && !isLoading && (
+              <div className="mt-5 text-[24px]">
+                <h1 className="">
+                  Title : <span className="font-bold">{metadata?.Title}</span>
+                </h1>
+                <h1 className="">
+                  Author : <span className="font-bold">{metadata?.Author}</span>
+                </h1>{" "}
+                <h1 className="">
+                  Creator :{" "}
+                  <span className="font-bold">{metadata?.Creator}</span>
+                </h1>{" "}
+                <h1 className="">
+                  Creation Date :{" "}
+                  <span className="font-bold">{metadata?.CreationDate}</span>
+                </h1>{" "}
+                <h1 className="">
+                  Pages :{" "}
+                  <span className="font-bold">{metadata?.PageCount}</span>
+                </h1>
+              </div>
+            )}
+            {isError && (
+              <div>
+                <h1 className="text-[24px] text-red-600">
+                  Cannot get meta data
+                </h1>
+              </div>
+            )}
+            {isLoading && (
+              <div className="mt-5">
+                <h1 className="text-[24px]">Loading meta data</h1>
+              </div>
+            )}
+          </>
         )}
       </DefaultTemplate>
     </>
