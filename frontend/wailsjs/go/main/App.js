@@ -34,6 +34,18 @@ export function GetHomeBooks() {
   return window['go']['main']['App']['GetHomeBooks']();
 }
 
+export function GetLibrary() {
+  return window['go']['main']['App']['GetLibrary']();
+}
+
 export function OpenImage(arg1) {
   return window['go']['main']['App']['OpenImage'](arg1);
+}
+
+export function UpdateLastReaded(arg1) {
+  return window['go']['main']['App']['UpdateLastReaded'](arg1);
+}
+
+export function UpdateProgress(arg1, arg2) {
+  return window['go']['main']['App']['UpdateProgress'](arg1, arg2);
 }

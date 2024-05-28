@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import { GetBookPDFData } from "../../../wailsjs/go/main/App";
+import {
+  GetBookPDFData,
+  UpdateLastReaded,
+  UpdateProgress,
+} from "../../../wailsjs/go/main/App";
 import { useParams, useSearchParams } from "react-router-dom";
 import PDFViewer from "../../components/PDFViewer";
 
@@ -18,6 +22,7 @@ export default function Read() {
       .catch((err) => {
         setErr(err);
       });
+    UpdateLastReaded(+(id as string));
   }, []);
   useEffect(() => {
     let page = urlSearchParams.get("page");
@@ -44,7 +49,18 @@ export default function Read() {
       )}
       {!err && (
         <>
-          <PDFViewer file={pdfBase64} pageNumber={page} />
+          <PDFViewer
+            file={pdfBase64}
+            pageNumber={page}
+            onPageChange={(numPages, pageIndex) => {
+              if (Number.isNaN(+(id as string))) return;
+              let prog = +(pageIndex / (numPages / 100)).toFixed(2);
+              console.log(prog);
+              UpdateProgress(+(id as string), prog).catch((err) => {
+                console.log(err);
+              });
+            }}
+          />
         </>
       )}
     </>

@@ -76,7 +76,10 @@ export default function Book() {
                   )}
                 </h1>
                 <h1 className="text-[24px]">
-                  Progress : <span className="font-bold">{book?.progress}</span>
+                  Progress :{" "}
+                  <span className="font-bold">
+                    {Math.round(book?.progress as number)}
+                  </span>
                   %
                 </h1>
                 <button

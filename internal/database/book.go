@@ -102,3 +102,13 @@ func (b *Book) DeleteBookDir(bookPath string) (error) {
 	}
 	return nil
 }
+
+// Get all the books with the matching conds
+func (b *Book) GetAll(db *gorm.DB) ([]Book,error) {
+	var results []Book
+	err := db.Model(Book{}).Find(&results,b).Error
+	if err != nil {
+		return []Book{},err
+	}
+	return results,nil
+}

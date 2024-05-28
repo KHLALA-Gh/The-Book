@@ -16,6 +16,7 @@ import Book from "./book";
 import Read from "./book/read";
 
 import { pdfjs } from "react-pdf";
+import Library from "./library";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "assets/pdfjs-dist/build/pdf.worker.js",
@@ -40,15 +41,14 @@ const router = createBrowserRouter([
 root.render(
   <React.StrictMode>
     <HashRouter basename={"/"}>
-      {/* The rest of your app goes here */}
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/first_book" element={<FirstBook />} />
         <Route path="/home" element={<Home />} />
         <Route path="/book/:id" element={<Book />} />
         <Route path="/book/:id/read" element={<Read />} />
+        <Route path="/library" element={<Library />} />
         <Route path="*" element={<NotFound />} />
-        {/* more... */}
       </Routes>
     </HashRouter>
   </React.StrictMode>

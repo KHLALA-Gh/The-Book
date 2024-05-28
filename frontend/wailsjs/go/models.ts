@@ -26,6 +26,7 @@ export namespace main {
 	export class HomeBooksData {
 	    recentlyAdded: database.Book[];
 	    lastReaded: database.Book[];
+	    favoriteBooks: database.Book[];
 	
 	    static createFrom(source: any = {}) {
 	        return new HomeBooksData(source);
@@ -35,6 +36,7 @@ export namespace main {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.recentlyAdded = this.convertValues(source["recentlyAdded"], database.Book);
 	        this.lastReaded = this.convertValues(source["lastReaded"], database.Book);
+	        this.favoriteBooks = this.convertValues(source["favoriteBooks"], database.Book);
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {

@@ -23,7 +23,9 @@ export default function Book({ id, name, img, progress }: BookAttr) {
         <img src={imgData.length ? imgData : DefaultImg} alt="" width={226} />
         <div className="mt-3">
           <h1 className="text-center text-[24px] font-bold">{name}</h1>
-          <p className="ml-10 mt-1">Progress : {progress}%</p>
+          <p className="ml-10 mt-1">
+            Progress : {Math.round(progress as number)}%
+          </p>
         </div>
       </div>
     </>

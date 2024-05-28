@@ -12,6 +12,7 @@ import usePDFMetadata from "../../hooks/usePDFMetadata";
 const EditablePdfViewer: React.FC<EditablePdfViewerProps> = ({
   file,
   pageNumber,
+  onPageChange,
 }) => {
   const [numPages, setNumPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(pageNumber || 1);
@@ -79,6 +80,11 @@ const EditablePdfViewer: React.FC<EditablePdfViewerProps> = ({
   useEffect(() => {
     setCurrentPage(pageNumber || 1);
   }, [pageNumber]);
+  useEffect(() => {
+    if (typeof onPageChange === "function") {
+      onPageChange(numPages, currentPage as number);
+    }
+  }, [currentPage]);
   return (
     <>
       <div>

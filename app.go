@@ -4,7 +4,6 @@ import (
 	"The_Book/internal/appr"
 	"The_Book/internal/database"
 	"context"
-	"fmt"
 	"os"
 	"path"
 	"time"
@@ -107,6 +106,7 @@ func (a *App) CheckBookExist(name string) (bool,error) {
 type HomeBooksData struct{
 	RecentlyAdded []database.Book `json:"recentlyAdded"`
 	LastReaded []database.Book		`json:"lastReaded"`
+	FavoriteBooks []database.Book  `json:"favoriteBooks"`
 }
 // Get the books data for the home page
 func (a *App) GetHomeBooks() (HomeBooksData,error) {
@@ -129,9 +129,23 @@ func (a *App) GetHomeBooks() (HomeBooksData,error) {
 	if err != nil {
 		return HomeBooksData{},err
 	}
+	for i,book := range lastReaded {
+		lastReaded[i].Img = path.Join(apprPath,book.Path,"img"+book.ImgExt)
+	}
+	favoriteConds := database.Book {
+		Favorite: true,
+	}
+	favoriteBooks,err := favoriteConds.GetAll(a.db)
+	if err != nil {
+		return HomeBooksData{},err
+	}
+	for i,book := range favoriteBooks {
+		favoriteBooks[i].Img = path.Join(apprPath,book.Path,"img"+book.ImgExt)
+	}
 	return HomeBooksData{
 		RecentlyAdded: recentlyAdded,
 		LastReaded: lastReaded,
+		FavoriteBooks: favoriteBooks,
 	},nil
 }
 // Get the book data, usually used for the frontend
@@ -174,7 +188,6 @@ func (a *App) OpenImage(filename string) ([]byte, error) {
 
 
 func (a *App) GetBookPDFData(id uint) (string,error) {
-	fmt.Println("###########################")
 
 	book := database.Book {
 		ID: id,
@@ -188,4 +201,44 @@ func (a *App) GetBookPDFData(id uint) (string,error) {
 		return "",err
 	}
 	return pdfBase64,nil
+}
+
+func (a *App) GetLibrary() ([]database.Book,error) {
+	conds := database.Book{}
+	books,err := conds.GetAll(a.db)
+	if err != nil {
+		return []database.Book{},err
+	}
+	apprDir,err := appr.GetAppResourcesDir()
+	if err != nil {
+		return []database.Book{},err
+	}
+	for i := 0; i < len(books) ; i++ {
+		books[i].Img = path.Join(apprDir,books[i].Path,"img"+books[i].ImgExt)
+	}
+	return books,nil
+}
+
+func (a *App) UpdateLastReaded(id uint) (error) {
+	book := database.Book{
+		ID: id,
+		LastReaded: time.Now(),
+	}
+	err := book.Save(a.db)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (a *App) UpdateProgress(id uint,progress float64) (error) {
+	book := database.Book{
+		ID: id,
+		Progress: progress,
+	}
+	err := book.Save(a.db)
+	if err != nil {
+		return err
+	}
+	return nil
 }

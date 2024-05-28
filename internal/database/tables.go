@@ -8,7 +8,7 @@ type Book struct {
 	ID uint `gorm:"primaryKey" json:"id"`
 	Name string `json:"name"`
 	Path string `json:"-"`
-	Progress int `json:"progress"`
+	Progress float64 `json:"progress"`
 	PDFileName string
 	ImgExt string
 	Favorite bool
