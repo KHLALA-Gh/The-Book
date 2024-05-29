@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { GetBook, GetBookPDFData } from "../../wailsjs/go/main/App";
+import {
+  GetBook,
+  GetBookPDFData,
+  SetBookFavorite,
+} from "../../wailsjs/go/main/App";
 import { database } from "../../wailsjs/go/models";
 import useImg from "../hooks/useImage";
 import DefaultTemplate from "../components/Templates/Default";
@@ -11,6 +15,8 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import usePDFMetadata from "../hooks/usePDFMetadata";
+import { faStar } from "@fortawesome/free-regular-svg-icons";
+import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 
 export default function Book() {
   const { id } = useParams();
@@ -38,6 +44,17 @@ export default function Book() {
       setPDFbase64(data);
     });
   }, []);
+  const clickFavorite = async () => {
+    try {
+      await SetBookFavorite(+(id as string), !book?.favorite);
+      setBook({
+        ...(book as database.Book),
+        favorite: !book?.favorite,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <>
       <DefaultTemplate>
@@ -55,6 +72,11 @@ export default function Book() {
               <div>
                 <h1 className="text-[32px] font-bold relative">
                   {book?.name}{" "}
+                  <FontAwesomeIcon
+                    icon={book?.favorite ? solidStar : faStar}
+                    className={"mr-6 " + (!book?.favorite || "text-yellow-500")}
+                    onClick={clickFavorite}
+                  />
                   <FontAwesomeIcon
                     onClick={() => {
                       setOp(!op);

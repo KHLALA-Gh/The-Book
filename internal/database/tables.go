@@ -11,7 +11,7 @@ type Book struct {
 	Progress float64 `json:"progress"`
 	PDFileName string
 	ImgExt string
-	Favorite bool
+	Favorite *bool `json:"favorite"`
 	CreatedAt    time.Time
   	UpdatedAt    time.Time
 	LastReaded time.Time

@@ -132,8 +132,9 @@ func (a *App) GetHomeBooks() (HomeBooksData,error) {
 	for i,book := range lastReaded {
 		lastReaded[i].Img = path.Join(apprPath,book.Path,"img"+book.ImgExt)
 	}
+	fv := true
 	favoriteConds := database.Book {
-		Favorite: true,
+		Favorite: &fv,
 	}
 	favoriteBooks,err := favoriteConds.GetAll(a.db)
 	if err != nil {
@@ -252,4 +253,17 @@ func (a *App) GetBookProgress(id uint) (float64,error) {
 		return 0,err
 	}
 	return book.Progress,nil
+}
+
+
+func (a *App) SetBookFavorite(id uint,favorite bool) (error) {
+	book := database.Book{
+		ID: id,
+		Favorite: &favorite,
+	}
+	err := book.Save(a.db)
+	if err != nil {
+		return err
+	}
+	return nil
 }

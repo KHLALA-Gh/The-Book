@@ -25,6 +25,8 @@ export function GetLibrary():Promise<Array<database.Book>>;
 
 export function OpenImage(arg1:string):Promise<Array<number>>;
 
+export function SetBookFavorite(arg1:number,arg2:boolean):Promise<void>;
+
 export function UpdateLastReaded(arg1:number):Promise<void>;
 
 export function UpdateProgress(arg1:number,arg2:number):Promise<void>;

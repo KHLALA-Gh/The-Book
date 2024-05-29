@@ -35,13 +35,7 @@ export default function Home() {
               {books?.recentlyAdded.map((book, i) => {
                 return (
                   <>
-                    <Book
-                      key={i}
-                      name={book.name}
-                      id={book.id}
-                      progress={book.progress}
-                      img={book.img}
-                    />
+                    <Book key={i} {...book} />
                   </>
                 );
               })}
@@ -55,13 +49,21 @@ export default function Home() {
               {books?.lastReaded.map((book, i) => {
                 return (
                   <>
-                    <Book
-                      key={i}
-                      name={book.name}
-                      id={book.id}
-                      progress={book.progress}
-                      img={book.img}
-                    />
+                    <Book key={i} {...book} />
+                  </>
+                );
+              })}
+            </div>
+          </>
+        )}
+        {books?.favoriteBooks.length != 0 && (
+          <>
+            <h1 className="text-[36px] font-bold mt-10">Your Favorite Books</h1>
+            <div className="mt-10 flex gap-10 flex-wrap">
+              {books?.favoriteBooks.map((book, i) => {
+                return (
+                  <>
+                    <Book key={i} {...book} />
                   </>
                 );
               })}

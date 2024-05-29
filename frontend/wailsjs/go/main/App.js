@@ -46,6 +46,10 @@ export function OpenImage(arg1) {
   return window['go']['main']['App']['OpenImage'](arg1);
 }
 
+export function SetBookFavorite(arg1, arg2) {
+  return window['go']['main']['App']['SetBookFavorite'](arg1, arg2);
+}
+
 export function UpdateLastReaded(arg1) {
   return window['go']['main']['App']['UpdateLastReaded'](arg1);
 }

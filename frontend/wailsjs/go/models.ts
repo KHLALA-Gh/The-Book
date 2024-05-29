@@ -4,6 +4,7 @@ export namespace database {
 	    id: number;
 	    name: string;
 	    progress: number;
+	    favorite?: boolean;
 	    img: string;
 	
 	    static createFrom(source: any = {}) {
@@ -15,6 +16,7 @@ export namespace database {
 	        this.id = source["id"];
 	        this.name = source["name"];
 	        this.progress = source["progress"];
+	        this.favorite = source["favorite"];
 	        this.img = source["img"];
 	    }
 	}
