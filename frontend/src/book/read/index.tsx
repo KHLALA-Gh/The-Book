@@ -6,6 +6,8 @@ import {
 } from "../../../wailsjs/go/main/App";
 import { useParams, useSearchParams } from "react-router-dom";
 import PDFViewer from "../../components/PDFViewer";
+import useProgress from "../../hooks/useProgress";
+import { DocumentCallback } from "react-pdf/dist/cjs/shared/types";
 
 export default function Read() {
   const { id } = useParams();
@@ -13,6 +15,7 @@ export default function Read() {
   const [page, setPage] = useState(1);
   const [urlSearchParams, _] = useSearchParams();
   const [err, setErr] = useState("");
+  const { progress } = useProgress(+(id as string));
   useEffect(() => {
     if (Number.isNaN(id)) return;
     GetBookPDFData(+(id as string))
@@ -50,8 +53,16 @@ export default function Read() {
       {!err && (
         <>
           <PDFViewer
+            scale={+localStorage.readScale || 1}
+            onZoomChange={(scale) => {
+              localStorage.readScale = scale;
+            }}
+            onPDFLoaded={(doc: DocumentCallback) => {
+              const page = Math.round((doc.numPages / 100) * progress);
+              setPage(page);
+            }}
             file={pdfBase64}
-            pageNumber={page}
+            pageNumber={page || 1}
             onPageChange={(numPages, pageIndex) => {
               if (Number.isNaN(+(id as string))) return;
               let prog = +(pageIndex / (numPages / 100)).toFixed(2);

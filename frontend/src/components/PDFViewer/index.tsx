@@ -13,10 +13,13 @@ const EditablePdfViewer: React.FC<EditablePdfViewerProps> = ({
   file,
   pageNumber,
   onPageChange,
+  onPDFLoaded,
+  onZoomChange,
+  scale: sc,
 }) => {
   const [numPages, setNumPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(pageNumber || 1);
-  const [scale, setScale] = useState(1);
+  const [scale, setScale] = useState(sc || 1);
   const [pdfBlobUrl, setBlobUrl] = useState("");
   const [pdfOutline, setPdfOutline] = useState<PDFOutline[]>();
   const pagesRef = useRef<HTMLDivElement[]>([]);
@@ -34,17 +37,9 @@ const EditablePdfViewer: React.FC<EditablePdfViewerProps> = ({
       });
       return pdfOutline;
     });
-    //let metadata = (await doc.getMetadata()).metadata;
-    /*setMetadata(() => {
-      return {
-        Author: metadata.get("calibre:author_sort"),
-        CreationDate: metadata.get("dc:date"),
-        Language: metadata.get("dc:language"),
-        Publisher: metadata.get("dc:publisher"),
-        Title: metadata.get("dc:title"),
-      };
-    });*/
     setNumPages(doc.numPages);
+    if (typeof onPDFLoaded !== "function") return;
+    onPDFLoaded(doc);
   }
   const base64toBlob = (base64: string) => {
     const byteCharacters = atob(base64);
@@ -85,6 +80,10 @@ const EditablePdfViewer: React.FC<EditablePdfViewerProps> = ({
       onPageChange(numPages, currentPage as number);
     }
   }, [currentPage]);
+  useEffect(() => {
+    if (typeof onZoomChange !== "function") return;
+    onZoomChange(scale);
+  }, [scale]);
   return (
     <>
       <div>

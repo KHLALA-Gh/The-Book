@@ -242,3 +242,14 @@ func (a *App) UpdateProgress(id uint,progress float64) (error) {
 	}
 	return nil
 }
+
+func (a *App) GetBookProgress(id uint) (float64,error) {
+	book := database.Book{
+		ID: id,
+	}
+	err := book.Get(a.db)
+	if err != nil {
+		return 0,err
+	}
+	return book.Progress,nil
+}

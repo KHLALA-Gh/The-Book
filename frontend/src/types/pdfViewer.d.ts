@@ -39,5 +39,8 @@ interface EditablePdfViewerProps {
   /** base64 encoded PDF file */
   file: string;
   pageNumber?: number;
+  scale?: number;
   onPageChange?: (numPages: number, pageIndex: number) => void;
+  onPDFLoaded?: (doc: DocumentCallback) => void;
+  onZoomChange?: (scale: number) => void;
 }

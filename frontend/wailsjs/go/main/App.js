@@ -26,6 +26,10 @@ export function GetBookPDFData(arg1) {
   return window['go']['main']['App']['GetBookPDFData'](arg1);
 }
 
+export function GetBookProgress(arg1) {
+  return window['go']['main']['App']['GetBookProgress'](arg1);
+}
+
 export function GetBooksCount() {
   return window['go']['main']['App']['GetBooksCount']();
 }
