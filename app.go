@@ -4,6 +4,7 @@ import (
 	"The_Book/internal/appr"
 	"The_Book/internal/database"
 	"context"
+	"fmt"
 	"os"
 	"path"
 	"time"
@@ -63,19 +64,27 @@ func (a *App) AskForBookImage() (string,error) {
 }
 
 func (a *App) CreateBook(name,img,bookFile string) (uint,error) {
+	verify := database.Book{Name: name}
+	exist,err := verify.Exist(a.db)
+	if err != nil {
+		return 0,err
+	}
+	if exist {
+		return 0,fmt.Errorf("the book with this name '%s' exists",name)
+	}
 	book := database.Book{
 		Name: name,
 		Path: "library/"+name,
 		PDFileName: "content.pdf",
 		ImgExt: path.Ext(img),
 	}
-	err := book.CreateBookDir(bookFile,img)
+
+	err = book.CreateBookDir(bookFile,img)
 	if err != nil {
 		return 0,err
 	}
 	err = book.Add(a.db)
 	if err !=nil {
-
 		return 0,err
 	}
 	return book.ID,err
@@ -263,6 +272,18 @@ func (a *App) SetBookFavorite(id uint,favorite bool) (error) {
 	}
 	err := book.Save(a.db)
 	if err != nil {
+		return err
+	}
+	return nil
+}
+
+
+func (a *App) DeleteBook(id uint) (error) {
+	book := database.Book{
+		ID: id,
+	}
+	err := book.Delete(a.db)
+	if err != nil  {
 		return err
 	}
 	return nil

@@ -12,6 +12,10 @@ import (
 
 // Insert the book in the database, update the id.
 func (b *Book) Add(db *gorm.DB) error {
+	if  b.Name == "" || len(b.Name) > 16{
+		return fmt.Errorf("invalid Book Name.")
+	}
+	
 	// if exist is not 0 then there is a book that has the same name as this on.
 	var exist int64
 	err := db.Model(&Book{}).Where("name = ?",b.Name).Count(&exist).Error
@@ -30,7 +34,10 @@ func (b *Book) Add(db *gorm.DB) error {
 
 // Get the book by it's id,then update the instance
 func (b *Book) Get(db *gorm.DB) error {
-	err := db.First(&b,Book{ID: b.ID}).Error
+	if b.ID == 0 {
+		return fmt.Errorf("book id not provided")
+	}
+	err := db.Find(&b,Book{ID: b.ID}).Error
 	if err !=nil {
 		return err
 	}
@@ -111,4 +118,16 @@ func (b *Book) GetAll(db *gorm.DB) ([]Book,error) {
 		return []Book{},err
 	}
 	return results,nil
+}
+
+func (b *Book) Exist(db *gorm.DB) (bool,error) {
+	var exist int64
+	err := db.Model(&Book{}).Where(b).Count(&exist).Error
+	if err !=nil{
+		return false,err
+	}
+	if exist == 0 {
+		return false,nil
+	}
+	return true,nil
 }

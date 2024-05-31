@@ -11,6 +11,8 @@ export function CheckBookExist(arg1:string):Promise<boolean>;
 
 export function CreateBook(arg1:string,arg2:string,arg3:string):Promise<number>;
 
+export function DeleteBook(arg1:number):Promise<void>;
+
 export function GetBook(arg1:number):Promise<database.Book>;
 
 export function GetBookPDFData(arg1:number):Promise<string>;

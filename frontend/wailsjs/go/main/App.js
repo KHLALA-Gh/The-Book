@@ -18,6 +18,10 @@ export function CreateBook(arg1, arg2, arg3) {
   return window['go']['main']['App']['CreateBook'](arg1, arg2, arg3);
 }
 
+export function DeleteBook(arg1) {
+  return window['go']['main']['App']['DeleteBook'](arg1);
+}
+
 export function GetBook(arg1) {
   return window['go']['main']['App']['GetBook'](arg1);
 }

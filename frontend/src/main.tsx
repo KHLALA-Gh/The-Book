@@ -17,6 +17,7 @@ import Read from "./book/read";
 
 import { pdfjs } from "react-pdf";
 import Library from "./library";
+import NewBook from "./new_book";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "assets/pdfjs-dist/build/pdf.worker.js",
@@ -26,17 +27,6 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 const container = document.getElementById("root");
 
 const root = createRoot(container!);
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-  },
-  {
-    path: "/first",
-    element: <FirstBook />,
-  },
-]);
 
 root.render(
   <React.StrictMode>
@@ -48,6 +38,7 @@ root.render(
         <Route path="/book/:id" element={<Book />} />
         <Route path="/book/:id/read" element={<Read />} />
         <Route path="/library" element={<Library />} />
+        <Route path="/new_book" element={<NewBook />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </HashRouter>

@@ -8,7 +8,7 @@ interface TemplateProps {
 export default function DefaultTemplate({ children }: TemplateProps) {
   return (
     <>
-      <div>
+      <div className="relative">
         <Bar />
         <div className="mt-24 pl-48 relative pr-16">{children}</div>
       </div>

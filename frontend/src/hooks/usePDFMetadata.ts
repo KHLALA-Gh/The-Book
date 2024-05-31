@@ -22,6 +22,7 @@ export default function usePDFMetadata(pdfBase64: string): {
         setIsLoading(false);
       })
       .catch((error) => {
+        setIsLoading(false);
         setIsError(true);
         setError(error);
       });

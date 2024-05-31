@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useRoutes } from "react-router-dom";
 import {
+  DeleteBook,
   GetBook,
   GetBookPDFData,
   SetBookFavorite,
@@ -17,15 +18,19 @@ import {
 import usePDFMetadata from "../hooks/usePDFMetadata";
 import { faStar } from "@fortawesome/free-regular-svg-icons";
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
+import DefaultImg from "../assets/images/dfbook.png";
+import PopUp from "../components/PopUp";
 
 export default function Book() {
   const { id } = useParams();
   const [book, setBook] = useState<database.Book>();
   const [op, setOp] = useState<boolean>();
   const [pdfBase64, setPDFbase64] = useState<string>("");
+  const [showDeletePopUp, setShowDeletePopUp] = useState<boolean>(false);
   const { metadata, isError, isLoading } = usePDFMetadata(pdfBase64);
   const { imgData } = useImg(book?.img || "");
   const [err, setErr] = useState<string>("");
+  const [popUpError, setPopUpError] = useState<string>("");
   useEffect(() => {
     if (Number.isInteger(id)) {
       setErr("Not A Valid ID " + id);
@@ -67,7 +72,7 @@ export default function Book() {
           <>
             <div className="flex gap-20">
               <div>
-                <img src={imgData} alt="wawa" width={226} />
+                <img src={imgData || DefaultImg} alt="wawa" width={226} />
               </div>
               <div>
                 <h1 className="text-[32px] font-bold relative">
@@ -85,8 +90,18 @@ export default function Book() {
                     icon={faEllipsisVertical}
                   />
                   {op && (
-                    <div className="rounded-md border-2 border-black text-[20px] absolute bottom-0 right-0 translate-y-[100%] translate-x-[100%] bg-white flex-col">
-                      <div className="pt-1 pb-1 pr-5 pl-5 bg-red-600 text-white cursor-pointer">
+                    <div
+                      onClick={() => {
+                        setOp(false);
+                      }}
+                      className="rounded-md border-2 border-black text-[20px] absolute bottom-0 right-0 translate-y-[100%] translate-x-[100%] bg-white flex-col"
+                    >
+                      <div
+                        onClick={() => {
+                          setShowDeletePopUp(!showDeletePopUp);
+                        }}
+                        className="pt-1 pb-1 pr-5 pl-5 bg-red-600 text-white cursor-pointer"
+                      >
                         <FontAwesomeIcon icon={faTrash} className="mr-2" />{" "}
                         delete
                       </div>
@@ -151,6 +166,41 @@ export default function Book() {
           </>
         )}
       </DefaultTemplate>
+      {showDeletePopUp && (
+        <PopUp
+          onClickBackground={() => {
+            setShowDeletePopUp(false);
+            setOp(false);
+          }}
+          title="Do you want to delete the book ?"
+          buttons={[
+            <button
+              onClick={async () => {
+                try {
+                  DeleteBook(+(id as string));
+                } catch (err) {
+                  if (typeof err !== "string") setPopUpError(err as string);
+                } finally {
+                  setShowDeletePopUp(false);
+                  location.href = "/#/home";
+                }
+              }}
+              className="btn !bg-red-600"
+            >
+              Yes
+            </button>,
+            <button
+              onClick={() => {
+                setShowDeletePopUp(false);
+                setOp(false);
+              }}
+              className="!bg-white border-2 border-black btn !text-black"
+            >
+              No
+            </button>,
+          ]}
+        />
+      )}
     </>
   );
 }

@@ -27,16 +27,18 @@ const EditablePdfViewer: React.FC<EditablePdfViewerProps> = ({
 
   //const [metadata, setMetadata] = useState<BookMetaData>();
   async function onDocumentLoadSuccess(doc: DocumentCallback) {
-    let outline = await doc.getOutline();
-    setPdfOutline(() => {
-      let pdfOutline: PDFOutline[] = [];
-      outline.map(async (o) => {
-        if (!o.dest) return;
-        let pageIndex = (await doc.getPageIndex(o.dest[0] as RefProxy)) || 1;
-        pdfOutline.push({ ...o, pageIndex });
+    try {
+      let outline = await doc.getOutline();
+      setPdfOutline(() => {
+        let pdfOutline: PDFOutline[] = [];
+        outline?.map(async (o) => {
+          if (!o.dest) return;
+          let pageIndex = (await doc.getPageIndex(o.dest[0] as RefProxy)) || 1;
+          pdfOutline.push({ ...o, pageIndex });
+        });
+        return pdfOutline;
       });
-      return pdfOutline;
-    });
+    } catch (err) {}
     setNumPages(doc.numPages);
     if (typeof onPDFLoaded !== "function") return;
     onPDFLoaded(doc);

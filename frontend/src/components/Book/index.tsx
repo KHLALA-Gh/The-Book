@@ -16,12 +16,17 @@ export default function Book({ id, name, img, progress, favorite }: BookAttr) {
   return (
     <>
       <div
-        className="bg-gray w-fit pb-7 cursor-pointer relative"
+        className="bg-gray w-fit pb-7 cursor-pointer relative border-black"
         onClick={() => {
           location.href = `/#/book/${id}`;
         }}
       >
-        <img src={imgData.length ? imgData : DefaultImg} alt="" width={226} />
+        <img
+          src={imgData.length ? imgData : DefaultImg}
+          alt=""
+          className=""
+          width={226}
+        />
         <div className="mt-3">
           <h1 className="text-center text-[24px] font-bold">
             {name}{" "}

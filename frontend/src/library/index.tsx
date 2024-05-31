@@ -17,7 +17,7 @@ export default function Library() {
           <p className="text-light text-[22px]">
             Find all your added books here.
           </p>
-          <div className="mt-20">
+          <div className="mt-20 flex flex-wrap gap-7">
             {books.map((book, i) => {
               return <Book key={i} {...book} img={book.img} />;
             })}
