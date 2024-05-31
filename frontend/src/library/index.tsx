@@ -23,6 +23,18 @@ export default function Library() {
             })}
           </div>
         </div>
+        {!books.length && (
+          <div className="flex w-full mt-10">
+            <div>
+              <h1 className="text-[32px] font-bold mb-6">
+                You don't have any book
+              </h1>
+              <a className="btn p-5 font-bold text-[20px] " href="/#/new_book">
+                Create One
+              </a>
+            </div>
+          </div>
+        )}
       </DefaultTemplate>
     </>
   );

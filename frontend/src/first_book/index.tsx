@@ -125,6 +125,7 @@ export default function FirstBook() {
                   return;
                 }
                 await CreateBook(name, image, bookPDF);
+                location.href = "/#/home";
               } catch (err: any) {
                 setErr(err);
               }

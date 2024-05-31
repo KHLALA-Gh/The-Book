@@ -97,21 +97,20 @@ export default function Book() {
                       className="rounded-md border-2 border-black text-[20px] absolute bottom-0 right-0 translate-y-[100%] translate-x-[100%] bg-white flex-col"
                     >
                       <div
-                        onClick={() => {
-                          setShowDeletePopUp(!showDeletePopUp);
-                        }}
-                        className="pt-1 pb-1 pr-5 pl-5 bg-red-600 text-white cursor-pointer"
-                      >
-                        <FontAwesomeIcon icon={faTrash} className="mr-2" />{" "}
-                        delete
-                      </div>
-
-                      <div
                         onClick={() => (location.href = `/#/book/${id}/edit`)}
-                        className="border-t-2 border-black pt-1 pb-1 pr-5 pl-5 cursor-pointer"
+                        className="pt-1 pb-1 pr-5 pl-5 cursor-pointer"
                       >
                         <FontAwesomeIcon icon={faPencil} className="mr-2" />{" "}
                         Edit
+                      </div>
+                      <div
+                        onClick={() => {
+                          setShowDeletePopUp(!showDeletePopUp);
+                        }}
+                        className="border-t-2 border-black pt-1 pb-1 pr-5 pl-5 bg-red-600 text-white cursor-pointer"
+                      >
+                        <FontAwesomeIcon icon={faTrash} className="mr-2" />{" "}
+                        delete
                       </div>
                     </div>
                   )}

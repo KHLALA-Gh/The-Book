@@ -121,3 +121,18 @@ func GetBookPDFBase64(bookPath string) (string,error) {
 	pdfBase64 := base64.StdEncoding.EncodeToString(data)
 	return pdfBase64,nil
 }
+
+func CreateLibrary()(error){
+	apprDir,err := GetAppResourcesDir()
+	if err != nil {
+		return err
+	}
+	libDir := path.Join(apprDir,"library")
+	if _,err = os.Stat(libDir) ; os.IsNotExist(err) {
+		err = os.Mkdir(libDir,0777)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}

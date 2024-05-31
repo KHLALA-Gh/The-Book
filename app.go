@@ -31,7 +31,10 @@ func NewApp() *App {
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 	// Create appr if not exist
-	appr.CreateApprDir()
+	err := appr.CreateApprDir()
+	if err != nil {
+		appr.CreateLibrary()
+	}
 }
 
 func (a *App) AskForBookPDF() (string, error) {
@@ -283,13 +286,22 @@ func (a *App) DeleteBook(id uint) (error) {
 	book := database.Book{
 		ID: id,
 	}
-	err := book.Delete(a.db)
+	err := book.Get(a.db)
 	if err != nil  {
 		return err
 	}
+
+	err = book.Delete(a.db)
+	if err != nil  {
+		return err
+	}
+	apprDir,_ := appr.GetAppResourcesDir()
+	bookDir := path.Join(apprDir,"library",book.Name)
+	os.RemoveAll(bookDir)
 	return nil
 }
-// TODO: function aint ready yet
+
+
 func (a *App) UpdateBook(id uint,name,pdfFilePath,imgFilePath string) (error) {
 	apprDir,err := appr.GetAppResourcesDir()
 	if err != nil {
