@@ -8,6 +8,7 @@ export default function PDFInput({
   onFileSelected,
   onError,
   onSelecting,
+  title,
 }: PDFInput) {
   const [bookPDF, setBookPDF] = useState(value);
 
@@ -34,7 +35,7 @@ export default function PDFInput({
             className="file-input w-[400px] flex justify-center flex-col items-center gap-3"
             onClick={getBook}
           >
-            <p className="text-light">PDF Book File</p>
+            <p className="text-light">{title || "PDF Book File"}</p>
             <FontAwesomeIcon icon={faFile} className="h-[92px] text-light" />
             <p className="text-light">book.pdf</p>
           </div>

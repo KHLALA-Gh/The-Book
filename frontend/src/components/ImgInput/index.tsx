@@ -8,6 +8,7 @@ export default function ImgInput({
   onFileSelected,
   onError,
   onSelecting,
+  title,
 }: ImgInput) {
   const [image, setImg] = useState(value);
   const [err, setErr] = useState("");
@@ -36,7 +37,7 @@ export default function ImgInput({
           className="file-input w-[400px] flex justify-center flex-col items-center gap-3"
           onClick={getImg}
         >
-          <p className="text-light">Book picture</p>
+          <p className="text-light">{title || "Book image"}</p>
           <div className="w-[109px] h-[109px] border-2 border-light"></div>
           <p className="text-light">667x1000</p>
         </div>

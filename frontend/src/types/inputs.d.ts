@@ -4,10 +4,13 @@ type FileInputEventsCallBacks = {
   onError?: (err: unknown) => void;
   onSelecting?: () => void;
 };
+type FileInputProps = {
+  title?: string;
+};
 
 type InputProps = {
   value?: string;
 };
 
-type PDFInput = InputProps & FileInputEventsCallBacks;
-type ImgInput = InputProps & FileInputEventsCallBacks;
+type PDFInput = InputProps & FileInputEventsCallBacks & FileInputProps;
+type ImgInput = InputProps & FileInputEventsCallBacks & FileInputProps;

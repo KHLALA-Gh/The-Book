@@ -54,6 +54,10 @@ export function SetBookFavorite(arg1, arg2) {
   return window['go']['main']['App']['SetBookFavorite'](arg1, arg2);
 }
 
+export function UpdateBook(arg1, arg2, arg3, arg4) {
+  return window['go']['main']['App']['UpdateBook'](arg1, arg2, arg3, arg4);
+}
+
 export function UpdateLastReaded(arg1) {
   return window['go']['main']['App']['UpdateLastReaded'](arg1);
 }

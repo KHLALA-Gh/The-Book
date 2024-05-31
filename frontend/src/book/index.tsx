@@ -105,7 +105,11 @@ export default function Book() {
                         <FontAwesomeIcon icon={faTrash} className="mr-2" />{" "}
                         delete
                       </div>
-                      <div className="border-t-2 border-black pt-1 pb-1 pr-5 pl-5 cursor-pointer">
+
+                      <div
+                        onClick={() => (location.href = `/#/book/${id}/edit`)}
+                        className="border-t-2 border-black pt-1 pb-1 pr-5 pl-5 cursor-pointer"
+                      >
                         <FontAwesomeIcon icon={faPencil} className="mr-2" />{" "}
                         Edit
                       </div>

@@ -4,15 +4,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 
 type BookAttr = {
-  id: number;
-  name: string;
+  id?: number;
+  name?: string;
   progress?: number;
-  img: string;
+  img?: string;
   favorite?: boolean;
 };
 
 export default function Book({ id, name, img, progress, favorite }: BookAttr) {
-  const { imgData } = useImg(img);
+  const { imgData } = useImg(img || "");
   return (
     <>
       <div

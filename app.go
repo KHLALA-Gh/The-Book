@@ -3,6 +3,7 @@ package main
 import (
 	"The_Book/internal/appr"
 	"The_Book/internal/database"
+	"The_Book/internal/fs"
 	"context"
 	"fmt"
 	"os"
@@ -286,5 +287,68 @@ func (a *App) DeleteBook(id uint) (error) {
 	if err != nil  {
 		return err
 	}
+	return nil
+}
+// TODO: function aint ready yet
+func (a *App) UpdateBook(id uint,name,pdfFilePath,imgFilePath string) (error) {
+	apprDir,err := appr.GetAppResourcesDir()
+	if err != nil {
+		return err
+	}
+	book := database.Book {
+		ID: id,
+	}
+	err = book.Get(a.db)
+	if err != nil {
+		return err
+	}
+	bookDir := path.Join(apprDir,"library",book.Name)
+	if  _,err = os.Stat(imgFilePath) ; err == nil && imgFilePath != path.Join(bookDir,"img"+book.ImgExt){
+		oldImg := path.Join(bookDir,"img"+book.ImgExt)
+		if _,err = os.Stat(oldImg); err == nil {
+			err = os.Remove(oldImg)
+			if err != nil {
+				return err
+			}
+		}
+		imgExt := path.Ext(imgFilePath)
+		err = fs.CopyFile(imgFilePath,path.Join(bookDir,"img"+imgExt))
+		if err != nil {
+			return err
+		}
+		book.ImgExt = imgExt
+		book.Save(a.db)
+	}
+	bookPdfFilePath := path.Join(bookDir,"content.pdf")
+	if _,err = os.Stat(pdfFilePath); err == nil   &&   bookPdfFilePath != pdfFilePath {
+		err = os.Remove(bookPdfFilePath)
+		if err != nil {
+			return err
+		}
+		err = fs.CopyFile(pdfFilePath,bookPdfFilePath)
+		if err != nil {
+			return err
+		}
+		book.Progress = 0.1
+		book.Save(a.db)
+	}
+	if name != "" && book.Name != name {
+		if len(name) > 16 {
+			return fmt.Errorf("invalid book name")
+		}
+		newBookDir := path.Join(apprDir,"library/"+name)
+		err = os.Rename(bookDir,newBookDir)
+		if err != nil {
+			return err
+		}
+		book.Name = name
+		book.Path = "library/"+name
+		err = book.Save(a.db)
+		if err != nil {
+			os.Rename(newBookDir,bookDir)
+			return err
+		}
+	}
+
 	return nil
 }
