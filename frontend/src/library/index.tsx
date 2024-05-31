@@ -3,9 +3,11 @@ import DefaultTemplate from "../components/Templates/Default";
 import { faBook } from "@fortawesome/free-solid-svg-icons";
 import useLibrary from "../hooks/useLibrary";
 import Book from "../components/Book";
+import { useState } from "react";
 
 export default function Library() {
   const { books } = useLibrary();
+  const [search, setSearch] = useState("");
   return (
     <>
       <DefaultTemplate>
@@ -17,9 +19,29 @@ export default function Library() {
           <p className="text-light text-[22px]">
             Find all your added books here.
           </p>
+          <input
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+            }}
+            type="text"
+            className="search-inp mt-3"
+            placeholder="Search"
+          />
           <div className="mt-20 flex flex-wrap gap-7">
             {books.map((book, i) => {
-              return <Book key={i} {...book} img={book.img} />;
+              if (!search) {
+                return <Book key={i} {...book} />;
+              }
+              if (
+                book.name
+                  .toLowerCase()
+                  .split(" ")
+                  .join("")
+                  .startsWith(search.split(" ").join("").toLowerCase())
+              ) {
+                return <Book key={i} {...book} />;
+              }
             })}
           </div>
         </div>

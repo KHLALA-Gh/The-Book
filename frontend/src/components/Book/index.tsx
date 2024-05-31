@@ -16,7 +16,7 @@ export default function Book({ id, name, img, progress, favorite }: BookAttr) {
   return (
     <>
       <div
-        className="bg-gray w-fit pb-7 cursor-pointer relative border-black"
+        className="bg-gray w-fit pb-7 cursor-pointer relative border-black max-w-[226px]"
         onClick={() => {
           location.href = `/#/book/${id}`;
         }}
@@ -29,7 +29,7 @@ export default function Book({ id, name, img, progress, favorite }: BookAttr) {
         />
         <div className="mt-3">
           <h1 className="text-center text-[24px] font-bold">
-            {name}{" "}
+            {name}
             {favorite && (
               <FontAwesomeIcon
                 icon={solidStar}

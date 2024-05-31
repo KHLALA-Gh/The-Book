@@ -19,3 +19,7 @@
 .btn {
   @apply bg-black pl-10 pr-10 pt-2 pb-2 rounded-xl font-semibold text-white;
 }
+
+.search-inp {
+  @apply bg-gray rounded-full pl-6 pt-2 pb-2 border-2 border-[#00000037] placeholder:text-light !text-[20px];
+}

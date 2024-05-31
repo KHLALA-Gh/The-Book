@@ -12,6 +12,12 @@ export default function Home() {
   useEffect(() => {
     GetHomeBooks()
       .then(async (data) => {
+        for (let i = 0; i < data.lastReaded.length; i++) {
+          data.recentlyAdded = data.recentlyAdded.filter((book) => {
+            if (book.id === data.lastReaded[i].id) return false;
+            return true;
+          });
+        }
         setBooks(data);
       })
       .catch((err) => {

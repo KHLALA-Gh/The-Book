@@ -13,13 +13,14 @@ export default function EditBook() {
   const [name, setName] = useState(book?.name || "");
   const [fileName, setFileName] = useState("");
   const [imgName, setImgName] = useState(book?.img || "");
+  const [err, setErr] = useState("");
   const updateBook = async () => {
     UpdateBook(+(id as string), name, fileName, imgName)
       .then(() => {
         location.href = `/#/book/${id}`;
       })
       .catch((err) => {
-        console.log(err);
+        setErr(err);
       });
   };
   useEffect(() => {
@@ -42,6 +43,7 @@ export default function EditBook() {
                   onChange={(e) => {
                     setName(e.target.value);
                   }}
+                  maxLength={16}
                 />
               </div>
               <div>
@@ -63,6 +65,8 @@ export default function EditBook() {
                 />
               </div>
             </div>
+            {isError && <p className="text-red-600 text-[20px]">{error}</p>}
+            {err && <p className="text-red-600 text-[20px]">{err}</p>}
             <button
               onClick={updateBook}
               className="mt-5 btn text-[24px] font-bold"
@@ -74,7 +78,6 @@ export default function EditBook() {
             <Book {...book} img={imgName} />
           </div>
         </div>
-        {isError && <p className="text-red-600 text-[20px]">{error}</p>}
       </DefaultTemplate>
     </>
   );
