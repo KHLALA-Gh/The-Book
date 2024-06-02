@@ -16,9 +16,9 @@ export default function Library() {
             <FontAwesomeIcon icon={faBook} className="mr-7" />
             Your Library
           </h1>
-          <p className="text-light text-[22px]">
+          <h1 className="text-light text-[22px]">
             Find all your added books here.
-          </p>
+          </h1>
           <input
             value={search}
             onChange={(e) => {
