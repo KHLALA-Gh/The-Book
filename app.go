@@ -6,11 +6,13 @@ import (
 	"The_Book/internal/fs"
 	"context"
 	"fmt"
+	"log"
 	"os"
 	"path"
 	"time"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
@@ -35,6 +37,13 @@ func (a *App) startup(ctx context.Context) {
 	if err != nil {
 		appr.CreateLibrary()
 	}
+	db,err := gorm.Open(sqlite.Open(path.Join(a.apprPath,"./database/data.db")))
+	database.MigrateTables(db)
+	if err !=nil {
+		log.Fatal(err)
+	}
+	a.db = db
+
 }
 
 func (a *App) AskForBookPDF() (string, error) {

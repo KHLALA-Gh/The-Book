@@ -2,17 +2,13 @@ package main
 
 import (
 	"The_Book/internal/appr"
-	"The_Book/internal/database"
 	"The_Book/internal/env"
 	"embed"
 	"log"
-	"path"
 
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
 )
 
 //go:embed all:frontend/dist
@@ -33,12 +29,7 @@ func main() {
 	if err!=nil {
 		log.Fatal(err)
 	}
-	db,err := gorm.Open(sqlite.Open(path.Join(apprDir,"./database/data.db")))
-	database.MigrateTables(db)
-	if err !=nil {
-		log.Fatal(err)
-	}
-	app.db = db
+
 	app.apprPath = apprDir
 	err = wails.Run(&options.App{
 		Title:  "The_Book",
