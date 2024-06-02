@@ -2,13 +2,7 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App";
-import {
-  HashRouter,
-  Route,
-  RouterProvider,
-  Routes,
-  createBrowserRouter,
-} from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import FirstBook from "./first_book";
 import Home from "./home";
 import NotFound from "./notfound";
