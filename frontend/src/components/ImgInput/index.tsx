@@ -48,7 +48,7 @@ export default function ImgInput({
           className="cursor-pointer border-4 border-black p-3 flex items-center gap-7 w-[400px]"
         >
           <FontAwesomeIcon icon={faImage} className="h-[24px]" />
-          <h1 className="font-bold text-xl">{image.split("/").at(-1)}</h1>
+          <h1 className="font-bold text-xl">{image.replace(/^.*[\\/]/, "")}</h1>
         </div>
       )}
     </>

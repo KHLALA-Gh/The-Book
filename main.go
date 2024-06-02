@@ -21,8 +21,6 @@ func main() {
 	}
 	// Create an instance of the app structure
 	app := NewApp()
-	// Create an instance of the appr structure
-	appres := appr.NewAppResources()
 	// Create application with options
 	// Connect to the database
 	apprDir,err := appr.GetAppResourcesDir()
@@ -42,7 +40,6 @@ func main() {
 		OnStartup:        app.startup,
 		Bind: []interface{}{
 			app,
-			appres,
 		},
 	})
 

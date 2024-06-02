@@ -9,13 +9,6 @@ import (
 	"runtime"
 )
 
-
-type AppResources struct {}
-
-func NewAppResources() *AppResources{
-	return &AppResources{}
-}
-
 // Get the app resources directory
 func GetAppResourcesDir() (string, error) {
 	pathDir := ""
@@ -82,7 +75,7 @@ func CreateApprDir() (error){
 	return nil
 }
 // Get how many books the user have
-func (appr *AppResources) GetBooksCount() (int,error) {
+func  GetBooksCount() (int,error) {
 	apprPath,err := GetAppResourcesDir()
 	if err !=nil {
 		return 0,err

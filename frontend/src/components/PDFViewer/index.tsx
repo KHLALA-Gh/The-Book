@@ -25,7 +25,6 @@ const EditablePdfViewer: React.FC<EditablePdfViewerProps> = ({
   const pagesRef = useRef<HTMLDivElement[]>([]);
   const { metadata } = usePDFMetadata(file);
 
-  //const [metadata, setMetadata] = useState<BookMetaData>();
   async function onDocumentLoadSuccess(doc: DocumentCallback) {
     try {
       let outline = await doc.getOutline();
@@ -99,10 +98,14 @@ const EditablePdfViewer: React.FC<EditablePdfViewerProps> = ({
           metadata={metadata}
         />
         <div
-          style={{ height: "100vh", width: "100%", overflowY: "scroll" }}
-          className="flex flex-col justify-center mt-16 items-center"
+          style={{ width: "100%" }}
+          className="flex flex-col justify-center mt-16 items-center mb-16"
         >
-          <Document file={pdfBlobUrl} onLoadSuccess={onDocumentLoadSuccess}>
+          <Document
+            className="!select-text"
+            file={pdfBlobUrl}
+            onLoadSuccess={onDocumentLoadSuccess}
+          >
             <div
               className={"border-black border-2 mb-10"}
               ref={(el) => pagesRef.current.push(el as HTMLDivElement)}

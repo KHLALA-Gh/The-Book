@@ -52,26 +52,28 @@ export default function Read() {
       )}
       {!err && (
         <>
-          <PDFViewer
-            scale={+localStorage.readScale || 1}
-            onZoomChange={(scale) => {
-              localStorage.readScale = scale;
-            }}
-            onPDFLoaded={(doc: DocumentCallback) => {
-              const page = Math.round((doc.numPages / 100) * progress);
-              setPage(page);
-            }}
-            file={pdfBase64}
-            pageNumber={page || 1}
-            onPageChange={(numPages, pageIndex) => {
-              if (Number.isNaN(+(id as string))) return;
-              let prog = +(pageIndex / (numPages / 100)).toFixed(2);
-              console.log(prog);
-              UpdateProgress(+(id as string), prog).catch((err) => {
-                console.log(err);
-              });
-            }}
-          />
+          <div className="mt-15">
+            <PDFViewer
+              scale={+localStorage.readScale || 1}
+              onZoomChange={(scale) => {
+                localStorage.readScale = scale;
+              }}
+              onPDFLoaded={(doc: DocumentCallback) => {
+                const page = Math.round((doc.numPages / 100) * progress);
+                setPage(page);
+              }}
+              file={pdfBase64}
+              pageNumber={page || 1}
+              onPageChange={(numPages, pageIndex) => {
+                if (Number.isNaN(+(id as string))) return;
+                let prog = +(pageIndex / (numPages / 100)).toFixed(2);
+                console.log(prog);
+                UpdateProgress(+(id as string), prog).catch((err) => {
+                  console.log(err);
+                });
+              }}
+            />
+          </div>
         </>
       )}
     </>
