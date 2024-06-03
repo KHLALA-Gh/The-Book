@@ -13,6 +13,7 @@ import { pdfjs } from "react-pdf";
 import Library from "./library";
 import NewBook from "./new_book";
 import EditBook from "./book/edit";
+import Store from "./store";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "assets/pdfjs-dist/build/pdf.worker.js",
@@ -35,6 +36,7 @@ root.render(
         <Route path="/book/:id/edit" element={<EditBook />} />
         <Route path="/library" element={<Library />} />
         <Route path="/new_book" element={<NewBook />} />
+        <Route path="/store" element={<Store />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </HashRouter>
