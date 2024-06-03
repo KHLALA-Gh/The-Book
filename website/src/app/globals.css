@@ -15,3 +15,7 @@
 * {
   font-family: "Inter" !important;
 }
+
+.btn {
+  @apply pt-4 pb-4 pl-12 pr-12 text-[32px] font-semibold;
+}

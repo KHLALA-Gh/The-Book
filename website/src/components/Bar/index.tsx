@@ -36,15 +36,15 @@ export default function Bar() {
   const router = useRouter();
   return (
     <>
-      <div className="bg-white pl-4 sm:pl-10 flex justify-between pr-6 sm:pr-16  pt-5 items-center relative">
+      <div className="bg-white pl-4 sm:pl-10 flex justify-between pr-6 sm:pr-16 relative pt-5 items-center">
         <div
           onClick={() => router.refresh()}
           className="cursor-pointer z-30 flex items-center gap-4 sm:gap-7 font-bold "
         >
           <Image
-            width={95}
-            height={95}
-            className="md:w-auto md:h-auto w-[64px] h-[64px]"
+            width={64}
+            height={64}
+            className="md:w-auto md:h-auto w-[48px] h-[48px]"
             alt="logo"
             src={"/img/logo.png"}
           />
@@ -68,7 +68,7 @@ export default function Bar() {
 
         <div
           className={
-            "w-[300px] h-screen bg-white p-5 absolute border-2 z-10 border-black top-0 duration-300 " +
+            "w-[300px] h-screen bg-white p-5 fixed border-2 z-10 border-black top-0 duration-300 " +
             (showOp ? "right-0" : "right-[-300px]")
           }
         >
@@ -86,17 +86,19 @@ export default function Bar() {
           </div>
         </div>
       </div>
-      <div
-        onClick={() => {
-          if (showOp) {
-            setShowOp(false);
+      {showOp && (
+        <div
+          onClick={() => {
+            if (showOp) {
+              setShowOp(false);
+            }
+          }}
+          className={
+            "fixed z-[5] w-full h-full bg-[#00000050] top-0 duration-300 " +
+            (showOp ? "opacity-100" : "opacity-0")
           }
-        }}
-        className={
-          "absolute w-full h-screen bg-[#00000050] top-0 duration-300 " +
-          (showOp ? "opacity-100" : "opacity-0")
-        }
-      ></div>
+        ></div>
+      )}
     </>
   );
 }
