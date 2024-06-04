@@ -16,6 +16,10 @@ const config: Config = {
       fontFamily: {
         sans: ["Inter"],
       },
+      colors: {
+        light: "rgb(0, 0, 0, 0.5)",
+        "light-w": "rgb(100, 100,100, 0.75)",
+      },
     },
   },
   plugins: [],

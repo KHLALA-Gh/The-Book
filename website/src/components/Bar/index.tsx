@@ -39,7 +39,7 @@ export default function Bar() {
       <div className="bg-white pl-4 sm:pl-10 flex justify-between pr-6 sm:pr-16 relative pt-5 items-center">
         <div
           onClick={() => router.refresh()}
-          className="cursor-pointer z-30 flex items-center gap-4 sm:gap-7 font-bold "
+          className="cursor-pointer z-10 flex items-center gap-4 sm:gap-7 font-bold "
         >
           <Image
             width={64}
