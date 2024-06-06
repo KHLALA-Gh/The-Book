@@ -11,8 +11,8 @@ export default function LatestVersion(versions: LatestVersionRespData) {
   const router = useRouter();
   return (
     <>
-      <div className="pl-16 mt-24">
-        <h1 className="text-[32px] font-bold">
+      <div className="sm:pl-16 pl-6 sm:pr-0 pr-6 mt-24">
+        <h1 className="sm:text-[32px] text-[20px] font-bold">
           The Book Latest Version{" "}
           {navigator.userAgent.indexOf("Windows") !== -1
             ? versions.windows.name
@@ -31,12 +31,12 @@ export default function LatestVersion(versions: LatestVersionRespData) {
         )}
         {navigator.userAgent.indexOf("Linux") !== -1 && (
           <>
-            <div className="flex gap-3">
+            <div className="md:flex gap-3">
               <button
                 onClick={() => {
                   router.push(versions.linuxDEB.downloadUrl);
                 }}
-                className="btn bg-black flex items-center gap-4 !text-[20px] text-white mt-7"
+                className="btn bg-black flex items-center gap-4 !text-[16px] md:!text-[20px] text-white mt-7"
               >
                 <FontAwesomeIcon icon={faDebian} className="h-10" />
                 Download for Linux .deb
@@ -45,7 +45,7 @@ export default function LatestVersion(versions: LatestVersionRespData) {
                 onClick={() => {
                   router.push(versions.linuxRPM.downloadUrl);
                 }}
-                className="btn bg-black flex items-center gap-4 !text-[20px] text-white mt-7"
+                className="btn bg-black flex items-center gap-4 !text-[16px] md:!text-[20px] text-white mt-7"
               >
                 <FontAwesomeIcon icon={faRedhat} className="h-10" />
                 Download for Linux .rpm

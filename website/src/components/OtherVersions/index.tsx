@@ -24,9 +24,9 @@ export default function OtherVersions() {
   };
   return (
     <>
-      <div className="p-20">
+      <div className="md:p-20 pl-6 pt-10">
         <h1 className="text-[36px] font-bold">Other Versions</h1>
-        <div className="flex gap-7">
+        <div className="flex sm:gap-7 text-[14px] gap-4 sm:text-[16px]">
           <div onClick={() => setSelectedType("windows")}>
             <h1
               className={

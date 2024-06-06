@@ -14,7 +14,7 @@ interface Link {
 const links: Link[] = [
   {
     name: "Features",
-    href: "#features",
+    href: "/#features",
   },
   {
     name: "Versions",

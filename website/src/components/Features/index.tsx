@@ -34,7 +34,10 @@ export default function Features() {
   const router = useRouter();
   return (
     <>
-      <div className="sm:pl-24 pr-4 pl-4 sm:pr-24 mt-32 flex items-center flex-col gap-64">
+      <div
+        className="sm:pl-24 pr-4 pl-4 sm:pr-24 mt-32 flex items-center flex-col gap-64"
+        id="features"
+      >
         {features.map((f, i) => {
           return (
             <div
