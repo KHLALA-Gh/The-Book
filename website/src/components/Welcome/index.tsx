@@ -1,7 +1,9 @@
 "use client";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 export default function Welcome() {
+  const route = useRouter();
   return (
     <>
       <div className="flex gap-5 p-10  justify-evenly relative">
@@ -39,6 +41,7 @@ export default function Welcome() {
             transition={{ duration: 1 }}
             viewport={{ once: true }}
             className="btn bg-black text-white md:ml-7 md:!text-[32px] !text-[18px]"
+            onClick={() => route.push("/versions")}
           >
             Download
           </motion.button>

@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface Features {
   title: string;
@@ -30,6 +31,7 @@ const features: Features[] = [
 ];
 
 export default function Features() {
+  const router = useRouter();
   return (
     <>
       <div className="sm:pl-24 pr-4 pl-4 sm:pr-24 mt-32 flex items-center flex-col gap-64">
@@ -126,7 +128,10 @@ export default function Features() {
           The app is still in early versions, and there are many features coming
           soon
         </p>
-        <button className="btn overflow-hidden bg-black relative text-white mt-5 !text-[24px]">
+        <button
+          onClick={() => router.push("/versions")}
+          className="btn overflow-hidden bg-black relative text-white mt-5 !text-[24px]"
+        >
           Download
         </button>
       </div>

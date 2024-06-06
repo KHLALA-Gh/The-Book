@@ -1,8 +1,10 @@
+"use client";
 import { IconDefinition, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faCircleDot } from "@fortawesome/free-regular-svg-icons";
 import { faCodePullRequest } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface RepoProps {
   icon: IconDefinition;
@@ -29,6 +31,7 @@ const repo: RepoProps[] = [
 ];
 
 export default function Footer() {
+  const router = useRouter();
   return (
     <>
       <div className="w-full bg-black p-7 text-white">
@@ -39,7 +42,10 @@ export default function Footer() {
               <p className="text-light-w text-[18px]">
                 A Simple application for reading books
               </p>
-              <button className="btn bg-white text-black !text-[20px] !pl-6 !pr-6 !pb-3 !pt-3 mt-5 w-fit">
+              <button
+                onClick={() => router.push("/versions")}
+                className="btn bg-white text-black !text-[20px] !pl-6 !pr-6 !pb-3 !pt-3 mt-5 w-fit"
+              >
                 Download
               </button>
               <div className="lg:justify-start justify-center gap-1 mt-3  lg:flex hidden">
