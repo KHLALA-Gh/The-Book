@@ -5,6 +5,7 @@ import "os"
 
 var vars =map[string]string{
 	"APPNAME" : "The_Book",
+	"VERSION" : "Beta-1",
 }
 
 func SetEnvs() (error) {

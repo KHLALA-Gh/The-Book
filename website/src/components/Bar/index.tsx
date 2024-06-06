@@ -76,8 +76,8 @@ export default function Bar() {
           <div className="mt-16">
             {links.map((l, i) => {
               return (
-                <div className="mt-10 font-semibold text-[20px]">
-                  <a target={l.target || ""} href={l.href} key={i}>
+                <div key={i} className="mt-10 font-semibold text-[20px]">
+                  <a target={l.target || ""} href={l.href}>
                     {l.name}
                   </a>
                 </div>

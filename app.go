@@ -4,6 +4,7 @@ import (
 	"The_Book/internal/appr"
 	"The_Book/internal/database"
 	"The_Book/internal/fs"
+	"The_Book/internal/updater"
 	"context"
 	"fmt"
 	"log"
@@ -43,7 +44,19 @@ func (a *App) startup(ctx context.Context) {
 		log.Fatal(err)
 	}
 	a.db = db
-
+	// Check for any updates
+	updateExist,err := updater.CheckForUpdate()
+	if err != nil {
+		fmt.Printf("error : unable to check for updates : %s",err)
+	}
+	if updateExist {
+		osSys := runtime.Environment(a.ctx)
+		fmt.Println(osSys)
+		err = updater.UpdateTheApp(osSys.Platform)
+		if err != nil {
+			fmt.Printf("error when updating the app : %s",err)
+		}
+	}
 }
 
 func (a *App) AskForBookPDF() (string, error) {

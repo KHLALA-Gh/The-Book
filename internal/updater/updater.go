@@ -39,13 +39,29 @@ func CheckForUpdate() (bool,error){
 
 // Update the app
 func UpdateTheApp(osName string) (error) {
-	url := path.Join(os.Getenv("UPDATE_HOST"),"versions/latest",osName)
+	url := path.Join(os.Getenv("UPDATE_HOST"),"versions/latest/bin/",osName)
 	resp,err := http.Get(url)
 	if err != nil {
 		return fmt.Errorf("error fetching the update : %s",err)
 	}
 	defer resp.Body.Close()
-	err = update.Apply(resp.Body,update.Options{})
+	body,err := io.ReadAll(resp.Body)
+	if err !=nil {
+		return fmt.Errorf("error when reading body : %s",err)
+	}
+	data := struct{
+		DownloadUrl string `json:"downloadUrl"`
+	}{}
+	err = json.Unmarshal(body,&data)
+	if err != nil {
+		return fmt.Errorf("error when unmarshaling the body : %s",err)
+	}
+	resp1,err := http.Get(data.DownloadUrl)
+	if err != nil {
+		return fmt.Errorf("error fetching the update : %s",err)
+	}
+	defer resp1.Body.Close()
+	err = update.Apply(resp1.Body,update.Options{})
 	if err != nil {
 		return fmt.Errorf("error when replacing the executable : %s",err)
 	}
