@@ -6,6 +6,7 @@ import "os"
 var vars =map[string]string{
 	"APPNAME" : "The_Book",
 	"VERSION" : "Beta-1",
+	"UPDATE_HOST" : "https://the-book-red.vercel.app/",
 }
 
 func SetEnvs() (error) {
