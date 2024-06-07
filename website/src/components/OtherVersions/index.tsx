@@ -75,7 +75,7 @@ export default function OtherVersions() {
                   <div className="grid grid-cols-3 gap-7" key={i}>
                     <a
                       href={ver.downloadUrl}
-                    >{`The_Book-${ver.name}-amd64.exe`}</a>
+                    >{`The_Book-${ver.name}-amd64-installer.exe`}</a>
                     <h1>{ver.name}</h1>
                     <h1>{ver.date}</h1>
                   </div>

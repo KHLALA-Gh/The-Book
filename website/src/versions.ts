@@ -18,7 +18,8 @@ export const versions: Versions = {
   windows: [
     {
       name: "Beta-1",
-      downloadUrl: "windows",
+      downloadUrl:
+        "https://www.mediafire.com/file/6e6r01odp4ue0jv/The_Book-amd64-installer.exe/file",
       date: "06/06/2024",
     },
   ],
@@ -34,7 +35,8 @@ export const versions: Versions = {
 export const WindowsExecutables: Version[] = [
   {
     name: "Beta-1",
-    downloadUrl: "windowsBin",
+    downloadUrl:
+      "https://www.mediafire.com/file/0nx7b5al5u22335/The_Book.exe/file",
     date: "06/06/2024",
   },
 ];
