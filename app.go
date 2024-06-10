@@ -10,12 +10,26 @@ import (
 	"log"
 	"os"
 	"path"
+	"strings"
 	"time"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
+
+func RemoveExtraSpaces(str string) string{
+	words := strings.Split(str," ")
+	i:=0
+	for i < len(words) {
+		if words[i] == "" && i < len(words){
+			words = append(words[:i], words[i+1:]...)
+		}else{
+			i++
+		}
+	}
+	return strings.Join(words," ")
+}
 
 // App struct
 type App struct {
@@ -90,6 +104,8 @@ func (a *App) AskForBookImage() (string,error) {
 }
 
 func (a *App) CreateBook(name,img,bookFile string) (uint,error) {
+
+	name = RemoveExtraSpaces(name)
 	verify := database.Book{Name: name}
 	exist,err := verify.Exist(a.db)
 	if err != nil {
@@ -326,6 +342,7 @@ func (a *App) DeleteBook(id uint) (error) {
 
 
 func (a *App) UpdateBook(id uint,name,pdfFilePath,imgFilePath string) (error) {
+	name = RemoveExtraSpaces(name)
 	apprDir,err := appr.GetAppResourcesDir()
 	if err != nil {
 		return err
