@@ -6,16 +6,16 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"unicode/utf8"
 
 	"gorm.io/gorm"
 )
 
 // Insert the book in the database, update the id.
 func (b *Book) Add(db *gorm.DB) error {
-	if  b.Name == "" || len(b.Name) > 16{
+	if  b.Name == "" || utf8.RuneCountInString(b.Name) > 16{
 		return fmt.Errorf("invalid Book Name.")
 	}
-	
 	// if exist is not 0 then there is a book that has the same name as this on.
 	var exist int64
 	err := db.Model(&Book{}).Where("name = ?",b.Name).Count(&exist).Error

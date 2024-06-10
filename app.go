@@ -111,6 +111,7 @@ func (a *App) CreateBook(name,img,bookFile string) (uint,error) {
 	}
 	err = book.Add(a.db)
 	if err !=nil {
+		book.DeleteBookDir(book.Path)
 		return 0,err
 	}
 	return book.ID,err
