@@ -22,6 +22,9 @@ const EditablePdfViewer: React.FC<EditablePdfViewerProps> = ({
   const [scale, setScale] = useState(sc || 1);
   const [pdfBlobUrl, setBlobUrl] = useState("");
   const [pdfOutline, setPdfOutline] = useState<PDFOutline[]>();
+  const [darkMode, setDarkMode] = useState<boolean>(
+    !!+(localStorage.darkMode || false)
+  );
   const pagesRef = useRef<HTMLDivElement[]>([]);
   const { metadata } = usePDFMetadata(file);
 
@@ -96,10 +99,18 @@ const EditablePdfViewer: React.FC<EditablePdfViewerProps> = ({
           scale={scale}
           changeScale={(n) => setScale(n)}
           metadata={metadata}
+          onDarkModeChange={(mode) => {
+            localStorage.darkMode = mode ? 1 : 0;
+            document.documentElement.style.setProperty(
+              "--viewer-bg",
+              `${mode ? "#000000D9" : "#ffffff"}`
+            );
+            setDarkMode(mode);
+          }}
         />
         <div
           style={{ width: "100%" }}
-          className="flex flex-col justify-center mt-16 items-center mb-16"
+          className={"flex flex-col justify-center mt-16 items-center mb-16"}
         >
           <Document
             className="!select-text"
@@ -107,10 +118,13 @@ const EditablePdfViewer: React.FC<EditablePdfViewerProps> = ({
             onLoadSuccess={onDocumentLoadSuccess}
           >
             <div
-              className={"border-black border-2 mb-10"}
+              className={"border-black border-2 mb-10 relative"}
               ref={(el) => pagesRef.current.push(el as HTMLDivElement)}
             >
               <Page scale={scale} pageNumber={currentPage} />
+              {darkMode && (
+                <div className="absolute top-0 left-0 bg-light w-full h-full "></div>
+              )}
             </div>
           </Document>
           <div className="flex gap-5">

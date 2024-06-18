@@ -8,7 +8,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 import PDFViewer from "../../components/PDFViewer";
 import useProgress from "../../hooks/useProgress";
 import { DocumentCallback } from "react-pdf/dist/cjs/shared/types";
-
+import "./style.css";
 export default function Read() {
   const { id } = useParams();
   const [pdfBase64, setPDFBase64] = useState("");
@@ -67,13 +67,11 @@ export default function Read() {
               onPageChange={(numPages, pageIndex) => {
                 if (Number.isNaN(+(id as string))) return;
                 let prog = +(pageIndex / (numPages / 100)).toFixed(2);
-                console.log(prog);
-                UpdateProgress(+(id as string), prog).catch((err) => {
-                  console.log(err);
-                });
+                UpdateProgress(+(id as string), prog).catch((err) => {});
               }}
             />
           </div>
+          <div className="mode -z-10"></div>
         </>
       )}
     </>

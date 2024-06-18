@@ -33,6 +33,8 @@ type TopBarData = {
   scale: number;
   changeScale: (scale: number) => void;
   metadata?: BookMetaData;
+  darkMode?: boolean;
+  onDarkModeChange?: (darkMode: boolean) => void;
 };
 
 interface EditablePdfViewerProps {

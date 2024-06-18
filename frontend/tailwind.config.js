@@ -7,6 +7,7 @@ export default {
         light: "rgba(0, 0, 0, 0.5)",
         gray: "#ebebeb",
         hover: "#00000029",
+        dark: "rgba(0, 0, 0, 0.85)",
       },
     },
   },

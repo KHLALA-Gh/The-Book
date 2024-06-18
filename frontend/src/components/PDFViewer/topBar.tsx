@@ -1,11 +1,11 @@
 import {
   faAlignLeft,
   faAsterisk,
-  faFile,
-  faL,
   faLeftLong,
   faMinus,
+  faMoon,
   faPlus,
+  faSun,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
@@ -20,11 +20,13 @@ export default function TopBar({
   changeScale,
   scale,
   metadata,
+  onDarkModeChange,
 }: TopBarData) {
   const [showChapters, setShowChapters] = useState(false);
   const [showMetadata, setShowMetadata] = useState(false);
   const [_, setUrlSearchParams] = useSearchParams();
   const [inpPage, setInpPage] = useState(pageIndex || 1);
+  const [darkMode, setDarkMode] = useState<boolean>(!!+localStorage.darkMode);
   useEffect(() => {
     setInpPage(pageIndex);
   }, [pageIndex]);
@@ -136,6 +138,18 @@ export default function TopBar({
           />
         </div>
         <div className="flex justify-center gap-10 items-end">
+          <div className="cursor-pointer">
+            <FontAwesomeIcon
+              icon={darkMode ? faSun : faMoon}
+              className="h-5"
+              onClick={() => {
+                setDarkMode(!darkMode);
+                if (onDarkModeChange) {
+                  onDarkModeChange(!darkMode);
+                }
+              }}
+            />
+          </div>
           <div className="flex items-center gap-3">
             <div
               title="zoom out"
