@@ -88,6 +88,12 @@ const EditablePdfViewer: React.FC<EditablePdfViewerProps> = ({
     if (typeof onZoomChange !== "function") return;
     onZoomChange(scale);
   }, [scale]);
+  useEffect(() => {
+    document.documentElement.style.setProperty(
+      "--viewer-bg",
+      `${darkMode ? "#000000d9" : "#ffffff"}`
+    );
+  }, []);
   return (
     <>
       <div>
