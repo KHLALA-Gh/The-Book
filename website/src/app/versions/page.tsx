@@ -5,16 +5,16 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 export default function Page() {
-  const [latestVersions, setLatestVersions] = useState<LatestVersionRespData>();
+  const [releases, setReleases] = useState<Release[]>();
   const ft = async () => {
-    const resp = await axios.get("/api/versions/latest");
-    let data = resp.data as LatestVersionRespData;
+    const resp = await axios.get("/api/versions");
+    let data = resp.data as Release[];
     return data;
   };
   useEffect(() => {
     ft()
       .then((d) => {
-        setLatestVersions(d);
+        setReleases(d);
       })
       .catch((err) => {
         console.log(err);
@@ -22,8 +22,8 @@ export default function Page() {
   }, []);
   return (
     <>
-      {latestVersions && <LatestVersion {...latestVersions} />}{" "}
-      <OtherVersions />
+      {releases && <LatestVersion {...releases[0]} />}{" "}
+      {releases && <OtherVersions releases={releases} />}
     </>
   );
 }

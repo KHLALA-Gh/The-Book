@@ -14,11 +14,11 @@ export default function LatestVersion(versions: LatestVersionRespData) {
       <div className="sm:pl-16 pl-6 sm:pr-0 pr-6 mt-24">
         <h1 className="sm:text-[32px] text-[20px] font-bold">
           The Book Latest Version{" "}
-          {navigator.userAgent.indexOf("Windows") !== -1
-            ? versions.windows.name
-            : versions.linuxDEB.name}
+          {navigator.userAgent.indexOf("Linux") !== -1
+            ? versions.linuxDEB.name
+            : versions.windows.name}
         </h1>
-        {navigator.userAgent.indexOf("Windows") !== -1 && (
+        {navigator.userAgent.indexOf("Linux") === -1 && (
           <button
             onClick={() => {
               router.push(versions.windows.downloadUrl);
