@@ -65,11 +65,12 @@ func (a *App) startup(ctx context.Context) {
 	}
 	if updateExist {
 		osSys := runtime.Environment(a.ctx)
-		fmt.Println(osSys)
+		log.Print("New Update Available : start downloading binary for ",osSys.Platform)
 		err = updater.UpdateTheApp(osSys.Platform)
 		if err != nil {
 			fmt.Printf("error when updating the app : %s",err)
 		}
+		fmt.Println()
 	}
 }
 
