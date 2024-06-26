@@ -14,7 +14,7 @@ export async function GET(req: Request): Promise<Response> {
     const result = await compareRelease(ver);
     return new Response(
       JSON.stringify({
-        upgarde: result,
+        upgrade: result,
       }),
       { status: 200 }
     );
