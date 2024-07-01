@@ -5,7 +5,7 @@ import "os"
 
 var vars =map[string]string{
 	"APPNAME" : "The_Book",
-	"VERSION" : "0.0.0",
+	"VERSION" : "0.1.0",
 	"UPDATE_HOST" : "the-book-red.vercel.app/",
 }
 
