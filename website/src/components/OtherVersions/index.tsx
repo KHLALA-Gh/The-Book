@@ -1,9 +1,7 @@
 "use client";
 
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./style.css";
-import { KeyObject } from "crypto";
 import Version from "./version";
 
 interface OtherVersionsProps {

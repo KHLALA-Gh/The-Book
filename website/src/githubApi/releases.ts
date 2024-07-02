@@ -88,10 +88,12 @@ function getRelease(release: any): Partial<Release> {
   const assets = release.assets as any[];
   const verName = release.name;
   const rel: Partial<Release> = {};
-  const archiveEndPoints = `https://github.com/${process.env.REPO}/archive/refs/tags/`;
+  const archiveEndPoint = new URL(
+    `https://github.com/${process.env.REPO}/archive/refs/tags/${release.tag_name}.zip`
+  );
   rel.SourceCode = {
     name: verName,
-    downloadUrl: path.join(archiveEndPoints, release.tag_name + ".zip"),
+    downloadUrl: archiveEndPoint.toString(),
     date: release.published_at,
     assetName: `The-Book-${release.tag_name}.zip`,
   };
