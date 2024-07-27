@@ -1,0 +1,17 @@
+
+/* Chrome, Safari, Edge, Opera */
+.page-inp[type="number"]::-webkit-outer-spin-button,
+.page-inp[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+.page-inp[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.page-inp{
+  background-color: transparent;
+}

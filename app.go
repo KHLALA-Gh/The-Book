@@ -1,10 +1,6 @@
 package main
 
 import (
-	"The_Book/internal/appr"
-	"The_Book/internal/database"
-	"The_Book/internal/fs"
-	"The_Book/internal/updater"
 	"context"
 	"fmt"
 	"log"
@@ -16,25 +12,30 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+
+	"The_Book/internal/appr"
+	"The_Book/internal/database"
+	"The_Book/internal/fs"
+	"The_Book/internal/updater"
 )
 
-func RemoveExtraSpaces(str string) string{
-	words := strings.Split(str," ")
-	i:=0
+func RemoveExtraSpaces(str string) string {
+	words := strings.Split(str, " ")
+	i := 0
 	for i < len(words) {
-		if words[i] == "" && i < len(words){
+		if words[i] == "" && i < len(words) {
 			words = append(words[:i], words[i+1:]...)
-		}else{
+		} else {
 			i++
 		}
 	}
-	return strings.Join(words," ")
+	return strings.Join(words, " ")
 }
 
 // App struct
 type App struct {
-	ctx context.Context
-	db *gorm.DB
+	ctx      context.Context
+	db       *gorm.DB
 	apprPath string
 }
 
@@ -52,230 +53,230 @@ func (a *App) startup(ctx context.Context) {
 	if err != nil {
 		appr.CreateLibrary()
 	}
-	db,err := gorm.Open(sqlite.Open(path.Join(a.apprPath,"./database/data.db")))
+	db, err := gorm.Open(sqlite.Open(path.Join(a.apprPath, "./database/data.db")))
 	database.MigrateTables(db)
-	if err !=nil {
+	if err != nil {
 		log.Fatal(err)
 	}
 	a.db = db
 	// Check for any updates
-	updateExist,err := updater.CheckForUpdate()
+	updateExist, err := updater.CheckForUpdate()
 	if err != nil {
-		fmt.Printf("error : unable to check for updates : %s",err)
+		fmt.Printf("error : unable to check for updates : %s", err)
 	}
 	if updateExist {
 		osSys := runtime.Environment(a.ctx)
-		log.Print("New Update Available : start downloading binary for ",osSys.Platform)
+		log.Print("New Update Available : start downloading binary for ", osSys.Platform)
 		err = updater.UpdateTheApp(osSys.Platform)
 		if err != nil {
-			fmt.Printf("error when updating the app : %s",err)
+			fmt.Printf("error when updating the app : %s", err)
 		}
 		fmt.Println()
 	}
 }
 
 func (a *App) AskForBookPDF() (string, error) {
-	dir,err :=  runtime.OpenFileDialog(a.ctx,runtime.OpenDialogOptions{
+	dir, err := runtime.OpenFileDialog(a.ctx, runtime.OpenDialogOptions{
 		Filters: []runtime.FileFilter{
 			{
 				DisplayName: "*.pdf",
-				Pattern: "*.pdf",
+				Pattern:     "*.pdf",
 			},
 		},
 	})
-	if err !=nil {
-		return "",err
+	if err != nil {
+		return "", err
 	}
-	return dir,nil
+	return dir, nil
 }
 
-func (a *App) AskForBookImage() (string,error) {
-	imgPath ,err := runtime.OpenFileDialog(a.ctx,runtime.OpenDialogOptions{
+func (a *App) AskForBookImage() (string, error) {
+	imgPath, err := runtime.OpenFileDialog(a.ctx, runtime.OpenDialogOptions{
 		Filters: []runtime.FileFilter{
 			{
 				DisplayName: "Image",
-				Pattern: "*.png;*.jpg;*.jpeg",
+				Pattern:     "*.png;*.jpg;*.jpeg",
 			},
 		},
 	})
 	if err != nil {
-		return "",err
+		return "", err
 	}
-	return imgPath,nil
+	return imgPath, nil
 }
 
-func (a *App) CreateBook(name,img,bookFile string) (uint,error) {
+func (a *App) CreateBook(name, img, bookFile string) (uint, error) {
 
 	name = RemoveExtraSpaces(name)
 	verify := database.Book{Name: name}
-	exist,err := verify.Exist(a.db)
+	exist, err := verify.Exist(a.db)
 	if err != nil {
-		return 0,err
+		return 0, err
 	}
 	if exist {
-		return 0,fmt.Errorf("the book with this name '%s' exists",name)
+		return 0, fmt.Errorf("the book with this name '%s' exists", name)
 	}
 	book := database.Book{
-		Name: name,
-		Path: "library/"+name,
+		Name:       name,
+		Path:       "library/" + name,
 		PDFileName: "content.pdf",
-		ImgExt: path.Ext(img),
+		ImgExt:     path.Ext(img),
 	}
 
-	err = book.CreateBookDir(bookFile,img)
+	err = book.CreateBookDir(bookFile, img)
 	if err != nil {
-		return 0,err
+		return 0, err
 	}
 	err = book.Add(a.db)
-	if err !=nil {
+	if err != nil {
 		book.DeleteBookDir(book.Path)
-		return 0,err
+		return 0, err
 	}
-	return book.ID,err
+	return book.ID, err
 }
 
-func (a *App) GetBooksCount() (int64,error) {
+func (a *App) GetBooksCount() (int64, error) {
 	var count int64
 	err := a.db.Model(&database.Book{}).Count(&count).Error
 	if err != nil {
-		return 0,err
+		return 0, err
 	}
-	return count,nil
+	return count, nil
 }
 
-func (a *App) CheckBookExist(name string) (bool,error) {
+func (a *App) CheckBookExist(name string) (bool, error) {
 	var count int64
-	err := a.db.Model(&database.Book{}).Where("name = ?",name).Count(&count).Error
+	err := a.db.Model(&database.Book{}).Where("name = ?", name).Count(&count).Error
 	if err != nil {
-		return false,err
+		return false, err
 	}
 	if count == 0 {
-		return false , nil
+		return false, nil
 	}
-	return true,nil
+	return true, nil
 }
 
-
-type HomeBooksData struct{
+type HomeBooksData struct {
 	RecentlyAdded []database.Book `json:"recentlyAdded"`
-	LastReaded []database.Book		`json:"lastReaded"`
-	FavoriteBooks []database.Book  `json:"favoriteBooks"`
+	LastReaded    []database.Book `json:"lastReaded"`
+	FavoriteBooks []database.Book `json:"favoriteBooks"`
 }
+
 // Get the books data for the home page
-func (a *App) GetHomeBooks() (HomeBooksData,error) {
+func (a *App) GetHomeBooks() (HomeBooksData, error) {
 	now := time.Now()
-	finishDate := now.AddDate(0,0,-15)
+	finishDate := now.AddDate(0, 0, -15)
 	recentlyAdded := []database.Book{}
-	err := a.db.Model(&database.Book{}).Where("created_at > ?",finishDate).Find(&recentlyAdded).Error
-	if err !=nil {
-		return HomeBooksData{},err
+	err := a.db.Model(&database.Book{}).Where("created_at > ?", finishDate).Find(&recentlyAdded).Error
+	if err != nil {
+		return HomeBooksData{}, err
 	}
-	apprPath,err := appr.GetAppResourcesDir()
-	if err !=nil {
-		return HomeBooksData{},err
+	apprPath, err := appr.GetAppResourcesDir()
+	if err != nil {
+		return HomeBooksData{}, err
 	}
-	for i,book := range recentlyAdded {
-		recentlyAdded[i].Img = path.Join(apprPath,book.Path,"img"+book.ImgExt)
+	for i, book := range recentlyAdded {
+		recentlyAdded[i].Img = path.Join(apprPath, book.Path, "img"+book.ImgExt)
 	}
 	lastReaded := []database.Book{}
-	err = a.db.Model(&database.Book{}).Where("last_readed > ?",finishDate).Find(&lastReaded).Error
+	err = a.db.Model(&database.Book{}).Where("last_readed > ?", finishDate).Find(&lastReaded).Error
 	if err != nil {
-		return HomeBooksData{},err
+		return HomeBooksData{}, err
 	}
-	for i,book := range lastReaded {
-		lastReaded[i].Img = path.Join(apprPath,book.Path,"img"+book.ImgExt)
+	for i, book := range lastReaded {
+		lastReaded[i].Img = path.Join(apprPath, book.Path, "img"+book.ImgExt)
 	}
 	fv := true
-	favoriteConds := database.Book {
+	favoriteConds := database.Book{
 		Favorite: &fv,
 	}
-	favoriteBooks,err := favoriteConds.GetAll(a.db)
+	favoriteBooks, err := favoriteConds.GetAll(a.db)
 	if err != nil {
-		return HomeBooksData{},err
+		return HomeBooksData{}, err
 	}
-	for i,book := range favoriteBooks {
-		favoriteBooks[i].Img = path.Join(apprPath,book.Path,"img"+book.ImgExt)
+	for i, book := range favoriteBooks {
+		favoriteBooks[i].Img = path.Join(apprPath, book.Path, "img"+book.ImgExt)
 	}
 	return HomeBooksData{
 		RecentlyAdded: recentlyAdded,
-		LastReaded: lastReaded,
+		LastReaded:    lastReaded,
 		FavoriteBooks: favoriteBooks,
-	},nil
+	}, nil
 }
+
 // Get the book data, usually used for the frontend
-func (a *App) GetBook(id uint) (database.Book,error) {
+func (a *App) GetBook(id uint) (database.Book, error) {
 	book := database.Book{
 		ID: id,
 	}
 	err := book.Get(a.db)
-	if err !=nil {
-		return database.Book{},nil
+	if err != nil {
+		return database.Book{}, nil
 	}
 
-	book.Img = path.Join(a.apprPath,book.Path,"img"+book.ImgExt)
-	return book,nil
+	book.Img = path.Join(a.apprPath, book.Path, "img"+book.ImgExt)
+	return book, nil
 }
 
 func (a *App) OpenImage(filename string) ([]byte, error) {
-    // Read image file
-    file, err := os.Open(filename)
-    if err != nil {
-        return nil, err
-    }
-    defer file.Close()
+	// Read image file
+	file, err := os.Open(filename)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
 
-    // Get file info to determine the file size
-    fileInfo, err := file.Stat()
-    if err != nil {
-        return nil, err
-    }
-    fileSize := fileInfo.Size()
+	// Get file info to determine the file size
+	fileInfo, err := file.Stat()
+	if err != nil {
+		return nil, err
+	}
+	fileSize := fileInfo.Size()
 
-    // Read the file contents into a byte slice
-    data := make([]byte, fileSize)
-    _, err = file.Read(data)
-    if err != nil {
-        return nil, err
-    }
-    return data, nil
+	// Read the file contents into a byte slice
+	data := make([]byte, fileSize)
+	_, err = file.Read(data)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
 }
 
+func (a *App) GetBookPDFData(id uint) (string, error) {
 
-func (a *App) GetBookPDFData(id uint) (string,error) {
-
-	book := database.Book {
+	book := database.Book{
 		ID: id,
 	}
 	err := book.Get(a.db)
 	if err != nil {
-		return "",err
+		return "", err
 	}
-	pdfBase64,err := appr.GetBookPDFBase64(path.Join(book.Path,book.PDFileName))
+	pdfBase64, err := appr.GetBookPDFBase64(path.Join(book.Path, book.PDFileName))
 	if err != nil {
-		return "",err
+		return "", err
 	}
-	return pdfBase64,nil
+	return pdfBase64, nil
 }
 
-func (a *App) GetLibrary() ([]database.Book,error) {
+func (a *App) GetLibrary() ([]database.Book, error) {
 	conds := database.Book{}
-	books,err := conds.GetAll(a.db)
+	books, err := conds.GetAll(a.db)
 	if err != nil {
-		return []database.Book{},err
+		return []database.Book{}, err
 	}
-	apprDir,err := appr.GetAppResourcesDir()
+	apprDir, err := appr.GetAppResourcesDir()
 	if err != nil {
-		return []database.Book{},err
+		return []database.Book{}, err
 	}
-	for i := 0; i < len(books) ; i++ {
-		books[i].Img = path.Join(apprDir,books[i].Path,"img"+books[i].ImgExt)
+	for i := 0; i < len(books); i++ {
+		books[i].Img = path.Join(apprDir, books[i].Path, "img"+books[i].ImgExt)
 	}
-	return books,nil
+	return books, nil
 }
 
-func (a *App) UpdateLastReaded(id uint) (error) {
+func (a *App) UpdateLastReaded(id uint) error {
 	book := database.Book{
-		ID: id,
+		ID:         id,
 		LastReaded: time.Now(),
 	}
 	err := book.Save(a.db)
@@ -285,9 +286,9 @@ func (a *App) UpdateLastReaded(id uint) (error) {
 	return nil
 }
 
-func (a *App) UpdateProgress(id uint,progress float64) (error) {
+func (a *App) UpdateProgress(id uint, progress float64) error {
 	book := database.Book{
-		ID: id,
+		ID:       id,
 		Progress: progress,
 	}
 	err := book.Save(a.db)
@@ -297,21 +298,20 @@ func (a *App) UpdateProgress(id uint,progress float64) (error) {
 	return nil
 }
 
-func (a *App) GetBookProgress(id uint) (float64,error) {
+func (a *App) GetBookProgress(id uint) (float64, error) {
 	book := database.Book{
 		ID: id,
 	}
 	err := book.Get(a.db)
 	if err != nil {
-		return 0,err
+		return 0, err
 	}
-	return book.Progress,nil
+	return book.Progress, nil
 }
 
-
-func (a *App) SetBookFavorite(id uint,favorite bool) (error) {
+func (a *App) SetBookFavorite(id uint, favorite bool) error {
 	book := database.Book{
-		ID: id,
+		ID:       id,
 		Favorite: &favorite,
 	}
 	err := book.Save(a.db)
@@ -321,64 +321,62 @@ func (a *App) SetBookFavorite(id uint,favorite bool) (error) {
 	return nil
 }
 
-
-func (a *App) DeleteBook(id uint) (error) {
+func (a *App) DeleteBook(id uint) error {
 	book := database.Book{
 		ID: id,
 	}
 	err := book.Get(a.db)
-	if err != nil  {
+	if err != nil {
 		return err
 	}
 
 	err = book.Delete(a.db)
-	if err != nil  {
+	if err != nil {
 		return err
 	}
-	apprDir,_ := appr.GetAppResourcesDir()
-	bookDir := path.Join(apprDir,"library",book.Name)
+	apprDir, _ := appr.GetAppResourcesDir()
+	bookDir := path.Join(apprDir, "library", book.Name)
 	os.RemoveAll(bookDir)
 	return nil
 }
 
-
-func (a *App) UpdateBook(id uint,name,pdfFilePath,imgFilePath string) (error) {
+func (a *App) UpdateBook(id uint, name, pdfFilePath, imgFilePath string) error {
 	name = RemoveExtraSpaces(name)
-	apprDir,err := appr.GetAppResourcesDir()
+	apprDir, err := appr.GetAppResourcesDir()
 	if err != nil {
 		return err
 	}
-	book := database.Book {
+	book := database.Book{
 		ID: id,
 	}
 	err = book.Get(a.db)
 	if err != nil {
 		return err
 	}
-	bookDir := path.Join(apprDir,"library",book.Name)
-	if  _,err = os.Stat(imgFilePath) ; err == nil && imgFilePath != path.Join(bookDir,"img"+book.ImgExt){
-		oldImg := path.Join(bookDir,"img"+book.ImgExt)
-		if _,err = os.Stat(oldImg); err == nil {
+	bookDir := path.Join(apprDir, "library", book.Name)
+	if _, err = os.Stat(imgFilePath); err == nil && imgFilePath != path.Join(bookDir, "img"+book.ImgExt) {
+		oldImg := path.Join(bookDir, "img"+book.ImgExt)
+		if _, err = os.Stat(oldImg); err == nil {
 			err = os.Remove(oldImg)
 			if err != nil {
 				return err
 			}
 		}
 		imgExt := path.Ext(imgFilePath)
-		err = fs.CopyFile(imgFilePath,path.Join(bookDir,"img"+imgExt))
+		err = fs.CopyFile(imgFilePath, path.Join(bookDir, "img"+imgExt))
 		if err != nil {
 			return err
 		}
 		book.ImgExt = imgExt
 		book.Save(a.db)
 	}
-	bookPdfFilePath := path.Join(bookDir,"content.pdf")
-	if _,err = os.Stat(pdfFilePath); err == nil   &&   bookPdfFilePath != pdfFilePath {
+	bookPdfFilePath := path.Join(bookDir, "content.pdf")
+	if _, err = os.Stat(pdfFilePath); err == nil && bookPdfFilePath != pdfFilePath {
 		err = os.Remove(bookPdfFilePath)
 		if err != nil {
 			return err
 		}
-		err = fs.CopyFile(pdfFilePath,bookPdfFilePath)
+		err = fs.CopyFile(pdfFilePath, bookPdfFilePath)
 		if err != nil {
 			return err
 		}
@@ -389,16 +387,16 @@ func (a *App) UpdateBook(id uint,name,pdfFilePath,imgFilePath string) (error) {
 		if len(name) > 16 {
 			return fmt.Errorf("invalid book name")
 		}
-		newBookDir := path.Join(apprDir,"library/"+name)
-		err = os.Rename(bookDir,newBookDir)
+		newBookDir := path.Join(apprDir, "library/"+name)
+		err = os.Rename(bookDir, newBookDir)
 		if err != nil {
 			return err
 		}
 		book.Name = name
-		book.Path = "library/"+name
+		book.Path = "library/" + name
 		err = book.Save(a.db)
 		if err != nil {
-			os.Rename(newBookDir,bookDir)
+			os.Rename(newBookDir, bookDir)
 			return err
 		}
 	}

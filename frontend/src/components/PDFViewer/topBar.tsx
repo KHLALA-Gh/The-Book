@@ -1,6 +1,8 @@
 import {
   faAlignLeft,
   faAsterisk,
+  faCaretDown,
+  faCaretUp,
   faLeftLong,
   faMinus,
   faMoon,
@@ -8,9 +10,9 @@ import {
   faSun,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-
+import "./style.css"
 export default function TopBar({
   outline,
   goBackUrl,
@@ -30,9 +32,31 @@ export default function TopBar({
   useEffect(() => {
     setInpPage(pageIndex);
   }, [pageIndex]);
+  const topBarRef = useRef<HTMLDivElement>(null);
+  useEffect(()=>{
+   let lastScrollTop = 0;
+   let navbar =  topBarRef.current
+
+    window.addEventListener('scroll', () => {
+      if (!navbar) return;
+      let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      if (scrollTop > lastScrollTop) {
+          // Scroll down
+           setShowChapters(false);
+           setShowMetadata(false);
+          navbar.style.top = '-2.5rem'; // Adjust the value to hide the navbar
+          navbar.style.translate = "0% -100%" 
+      } else {
+        // Scroll up
+          navbar.style.top = '2.5rem';
+          navbar.style.translate = "0% 0%"
+      }
+      lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // For Mobile or negative scrolling
+  }) 
+  },[])
   return (
     <>
-      <div className="fixed items-center w-full h-10 bg-gray top-0 z-10 grid grid-cols-3">
+      <div ref={topBarRef} className="pt-4 pb-4 pl-5 pr-5 sticky duration-200 w-[90%] ml-[50%] translate-x-[-50%] items-center rounded-lg bg-gray top-10 z-10 grid grid-cols-3">
         <div className="ml-3 flex items-center gap-5 h-full">
           <div
             title="leave the reader"
@@ -55,7 +79,7 @@ export default function TopBar({
             </div>
 
             {showChapters && (
-              <div className=" absolute bg-gray w-[500px] rounded-md flex gap-3 flex-col p-2 translate-y-[10px]">
+              <div className=" absolute top-16 bg-gray w-[500px] max-h-[500px] overflow-scroll rounded-md flex gap-3 flex-col p-2 translate-y-[10px]">
                 {outline?.map((chapter, i) => {
                   return (
                     <>
@@ -63,13 +87,13 @@ export default function TopBar({
                         key={i}
                         onClick={() => {
                           setUrlSearchParams([
-                            ["page", `${chapter.pageIndex}`],
+                            ["page", `${chapter.pageIndex+1}`],
                           ]);
-                          changePage(chapter.pageIndex);
+                          changePage(chapter.pageIndex+1);
                         }}
-                        className="cursor-pointer"
+                        className="cursor-pointer duration-200 pt-2 pl-3 pb-2 hover:bg-hover rounded-md"
                       >
-                        <h1>{chapter.title}</h1>
+                        <h1 className="cursor-pointer">{i+1}. {chapter.title}</h1>
                       </div>
                     </>
                   );
@@ -97,12 +121,12 @@ export default function TopBar({
             {showMetadata && (
               <>
                 {!metadata && (
-                  <div>
+                  <div className="top-16">
                     <h1>No Meta Data</h1>
                   </div>
                 )}
                 {metadata && (
-                  <div className="absolute bg-gray w-[500px] rounded-md flex gap-3 flex-col p-2 translate-y-[10px]">
+                  <div className="absolute top-16 bg-gray w-[500px] max-h-[500px] overflow-scroll rounded-md flex gap-3 flex-col p-2 translate-y-[10px]">
                     <h1>Title : {metadata.Title}</h1>
                     <h1>Author : {metadata.Author}</h1>
                     <h1>Creator : {metadata.Creator}</h1>
@@ -117,11 +141,18 @@ export default function TopBar({
             )}
           </div>
         </div>
-        <div className="flex justify-center h-[70%] ">
+        <div className="flex justify-center items-center gap-2 h-[70%] ">
+          <div className="cursor-pointer" onClick={()=>{
+              if (inpPage <= 1)return
+              setInpPage(inpPage-1)
+              changePage(inpPage-1)
+            }}>
+            <FontAwesomeIcon icon={faCaretDown} className={"h-6"+(inpPage <= 1 ? " opacity-0 cursor-auto" : "")}/>
+          </div>
           <input
             type="number"
             value={inpPage || ""}
-            className="inp w-[100px] text-center"
+            className="inp w-14 text-center page-inp font-bold text-[24px]"
             onChange={(e) => {
               if (0 <= +e.target.value && +e.target.value <= numPages) {
                 setInpPage(+e.target.value);
@@ -136,20 +167,16 @@ export default function TopBar({
               changePage(inpPage);
             }}
           />
+          <div className="cursor-pointer" onClick={()=>{
+            if (inpPage >= numPages)return
+            setInpPage(inpPage+1)
+            changePage(inpPage+1)
+          }}>
+          <FontAwesomeIcon icon={faCaretUp} className={"h-6" + (inpPage >= numPages ? " opacity-0 cursor-auto" : "")}/>
         </div>
-        <div className="flex justify-center gap-10 items-end">
-          <div className="cursor-pointer">
-            <FontAwesomeIcon
-              icon={darkMode ? faSun : faMoon}
-              className="h-5"
-              onClick={() => {
-                setDarkMode(!darkMode);
-                if (onDarkModeChange) {
-                  onDarkModeChange(!darkMode);
-                }
-              }}
-            />
-          </div>
+        </div>
+        <div className="flex justify-center gap-16 items-end">
+
           <div className="flex items-center gap-3">
             <div
               title="zoom out"
@@ -160,7 +187,7 @@ export default function TopBar({
             >
               <FontAwesomeIcon icon={faMinus} className="h-5 cursor-pointer" />
             </div>
-            <h1>Scale : {Math.round(scale * 100)}%</h1>
+            <h1 className="font-bold text-xl pb-1">{Math.round(scale * 100)}%</h1>
             <div
               title="zoom in"
               onClick={() => {
@@ -170,6 +197,18 @@ export default function TopBar({
             >
               <FontAwesomeIcon icon={faPlus} className="h-5 cursor-pointer" />
             </div>
+          </div>
+          <div className="cursor-pointer pb-[0.15rem]">
+            <FontAwesomeIcon
+              icon={darkMode ? faSun : faMoon}
+              className="h-6"
+              onClick={() => {
+                setDarkMode(!darkMode);
+                if (onDarkModeChange) {
+                  onDarkModeChange(!darkMode);
+                }
+              }}
+            />
           </div>
         </div>
       </div>

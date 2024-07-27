@@ -1,5 +1,4 @@
 import axios from "axios";
-import path from "path";
 
 // some constants
 export const GITHUB_API_VERSION = "2022-11-28";
@@ -16,7 +15,7 @@ export class ReleaseDATA implements Partial<Release> {
     (Object.keys(release) as (keyof Release)[]).map(
       (platform: keyof Release) => {
         this[platform] = release[platform];
-      }
+      },
     );
   }
   get name() {
@@ -51,10 +50,10 @@ export class ReleaseDATA implements Partial<Release> {
  */
 async function listReleases(
   per_page: number = 30,
-  page: number = 1
+  page: number = 1,
 ): Promise<any[]> {
   const url = new URL(
-    `https://api.github.com/repos/${process.env.REPO}/releases`
+    `https://api.github.com/repos/${process.env.REPO}/releases`,
   );
   url.searchParams.set("per_page", `${per_page}`);
   url.searchParams.set("page", `${page}`);
@@ -89,7 +88,7 @@ function getRelease(release: any): Partial<Release> {
   const verName = release.name;
   const rel: Partial<Release> = {};
   const archiveEndPoint = new URL(
-    `https://github.com/${process.env.REPO}/archive/refs/tags/${release.tag_name}.zip`
+    `https://github.com/${process.env.REPO}/archive/refs/tags/${release.tag_name}.zip`,
   );
   rel.SourceCode = {
     name: verName,

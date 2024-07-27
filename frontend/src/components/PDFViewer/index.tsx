@@ -116,18 +116,18 @@ const EditablePdfViewer: React.FC<EditablePdfViewerProps> = ({
         />
         <div
           style={{ width: "100%" }}
-          className={"flex flex-col justify-center mt-16 items-center mb-16"}
+          className={"z-0 flex flex-col justify-center mt-24 items-center mb-16"}
         >
           <Document
-            className="!select-text"
+            className="!select-text z-0"
             file={pdfBlobUrl}
             onLoadSuccess={onDocumentLoadSuccess}
           >
             <div
-              className={"border-black border-2 mb-10 relative"}
+              className={"border-black border-2 mb-10 relative z-0"}
               ref={(el) => pagesRef.current.push(el as HTMLDivElement)}
             >
-              <Page scale={scale} pageNumber={currentPage} />
+              <Page scale={scale} pageNumber={currentPage} className="z-0"/>
               {darkMode && (
                 <div className="absolute top-0 left-0 bg-light w-full h-full "></div>
               )}
