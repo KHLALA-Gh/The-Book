@@ -6,7 +6,7 @@
         <li >
             <a style="margin-right:10px;" href="https://the-book-red.vercel.app/">Website</a>
             <a style="margin-right:10px;" href="https://the-book-red.vercel.app/versions">Download</a>
-            <a style="margin-right:10px;" href="./releases">Releases</a>
+            <a style="margin-right:10px;" href="https://github.com/KHLALA-Gh/The-Book/releases">Releases</a>
         </li>
     </ul>
 </div>
@@ -33,7 +33,7 @@ Enjoy reading with a simple and nice book viewer that lets you see all the book 
 
 # Issues
 
-If you encounter any bugs or problems, feel free to report them in [Issues]("./issues").
+If you encounter any bugs or problems, feel free to report them in [Issues](https://github.com/KHLALA-Gh/The-Book/issues).
 
 # Run From Source Code
 
