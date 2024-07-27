@@ -8,7 +8,7 @@ require (
 	github.com/inconshreveable/go-update v0.0.0-20160112193335-8152e7eb6ccf
 	github.com/wailsapp/wails/v2 v2.8.1
 	gorm.io/driver/sqlite v1.5.5
-	gorm.io/gorm v1.25.7
+	gorm.io/gorm v1.25.7-0.20240204074919-46816ad31dde
 )
 
 require (
