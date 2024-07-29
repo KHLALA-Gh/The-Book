@@ -4,9 +4,9 @@
     </h1>
     <ul align="center" style="list-style-type: none;">
         <li >
-            <a style="margin-right:10px;" href="https://the-book-red.vercel.app/">Website</a>
-            <a style="margin-right:10px;" href="https://the-book-red.vercel.app/versions">Download</a>
-            <a style="margin-right:10px;" href="https://github.com/KHLALA-Gh/The-Book/releases">Releases</a>
+            <a style="margin-right:30px;" href="https://the-book-red.vercel.app/">Website</a>
+            <a style="margin-right:30px;" href="https://the-book-red.vercel.app/versions">Download</a>
+            <a style="margin-right:30px;" href="https://github.com/KHLALA-Gh/The-Book/releases">Releases</a>
         </li>
     </ul>
 </div>
