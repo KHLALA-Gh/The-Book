@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useRoutes } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   DeleteBook,
   GetBook,
@@ -30,7 +30,7 @@ export default function Book() {
   const { metadata, isError, isLoading } = usePDFMetadata(pdfBase64);
   const { imgData } = useImg(book?.img || "");
   const [err, setErr] = useState<string>("");
-  const [popUpError, setPopUpError] = useState<string>("");
+  const [_, setPopUpError] = useState<string>("");
   useEffect(() => {
     if (Number.isInteger(id)) {
       setErr("Not A Valid ID " + id);
@@ -133,25 +133,30 @@ export default function Book() {
               </div>
             </div>
             {metadata && !isLoading && (
-              <div className="mt-5 text-[24px]">
-                <h1 className="">
-                  Title : <span className="font-bold">{metadata?.Title}</span>
-                </h1>
-                <h1 className="">
-                  Author : <span className="font-bold">{metadata?.Author}</span>
-                </h1>{" "}
-                <h1 className="">
-                  Creator :{" "}
-                  <span className="font-bold">{metadata?.Creator}</span>
-                </h1>{" "}
-                <h1 className="">
-                  Creation Date :{" "}
-                  <span className="font-bold">{metadata?.CreationDate}</span>
-                </h1>{" "}
-                <h1 className="">
-                  Pages :{" "}
-                  <span className="font-bold">{metadata?.PageCount}</span>
-                </h1>
+              <div className="mt-10 text-[24px] bg-hover p-5 rounded-xl w-fit">
+                  <h1 className="font-bold text-[28px] mb-5">
+                      About The Book
+                  </h1>
+                  <div>
+                    <h1 className="">
+                      Title : <span className="font-bold">{metadata?.Title}</span>
+                    </h1>
+                    <h1 className="">
+                      Author : <span className="font-bold">{metadata?.Author}</span>
+                    </h1>{" "}
+                    <h1 className="">
+                      Creator :{" "}
+                      <span className="font-bold">{metadata?.Creator}</span>
+                    </h1>{" "}
+                    <h1 className="">
+                      Creation Date :{" "}
+                      <span className="font-bold">{metadata?.CreationDate}</span>
+                    </h1>{" "}
+                    <h1 className="">
+                      Pages :{" "}
+                      <span className="font-bold">{metadata?.PageCount}</span>
+                    </h1>
+                  </div>
               </div>
             )}
             {isError && (
